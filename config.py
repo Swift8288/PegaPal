@@ -74,7 +74,7 @@ LLM_BACKEND = os.getenv("LLM_BACKEND", "claude")
 # ── RAG Config ─────────────────────────────────────────────────────────
 CHUNK_SIZE = 800          # characters per chunk
 CHUNK_OVERLAP = 150       # overlap between chunks
-TOP_K = 8                 # number of context chunks to retrieve
+TOP_K = 5                 # context chunks to retrieve (5 is optimal for larger corpus — fast + accurate)
 
 # ── Crawler Config ─────────────────────────────────────────────────────
 CRAWL_DELAY = 1.0         # seconds between requests (be polite)

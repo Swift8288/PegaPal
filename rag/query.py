@@ -322,14 +322,14 @@ def estimate_confidence(hits: list[dict]) -> str:
 
     best_distance = hits[0]["distance"]
 
-    # Thresholds calibrated for TF-IDF with real user queries:
-    # - Users type abbreviated errors ("index of outbound" vs "IndexOutOfBoundsException")
-    # - Short queries (3-5 words) naturally score lower similarity
-    # - With 18+ comprehensive KB docs, broad topic queries reliably pull relevant context
-    # - 25%+ match (distance < 0.75) reliably pulls relevant context for good answers
-    if best_distance < 0.75:
+    # Thresholds calibrated for TF-IDF with expanded corpus (200+ docs):
+    # - Larger corpus shifts IDF weights, making distances slightly higher
+    # - Topic-based docs (from official PDFs) produce focused, shorter chunks
+    # - 15%+ match (distance < 0.85) reliably pulls relevant context for good answers
+    # - With hybrid search (keyword + vector), even moderate vector scores are useful
+    if best_distance < 0.85:
         return "HIGH"
-    elif best_distance < 0.90:
+    elif best_distance < 0.95:
         return "MEDIUM"
     else:
         return "LOW"
@@ -471,8 +471,8 @@ class PegaDebugEngine:
         if use_general_knowledge:
             answer = answer + "\n\n---\n*This answer is based on general Pega knowledge, not the curated knowledge base. Verify details in official Pega documentation.*"
             confidence = "GENERAL"
-        elif best_match_pct < 35:
-            # Low match — answer uses both KB fragments and general knowledge
+        elif best_match_pct < 20:
+            # Very low match — answer uses both KB fragments and general knowledge
             confidence = "MEDIUM"
 
         # Step 5: Package result
