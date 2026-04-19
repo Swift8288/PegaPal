@@ -677,7 +677,7 @@ if st.session_state.messages:
             # Phase 1: just show "Processing..." and rerun immediately
             st.session_state.processing = True
             with st.chat_message("assistant"):
-                st.markdown("🔍 *Searching knowledge base...*")
+                st.status("🤖 PegaPal is thinking...", expanded=True).write("📡 Searching knowledge base...")
             st.rerun()
         else:
             # Phase 2: actually process
@@ -913,8 +913,8 @@ else:
             st.button("🤖 Pega RPA Overview", use_container_width=True,
                        on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
         with col3:
-            st.button("🔄 SOAP vs REST", use_container_width=True,
-                       on_click=_send_question, args=("Compare SOAP vs REST in Pega — when to use which?",))
+            st.button("✨ Pega Constellation", use_container_width=True,
+                       on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
         with col4:
             st.button("📦 Deployment Manager", use_container_width=True,
                        on_click=_send_question, args=("How to use Pega Deployment Manager for CI/CD?",))
