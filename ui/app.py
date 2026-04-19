@@ -723,6 +723,10 @@ if st.session_state.messages:
             elif st.session_state.engine_error:
                 st.session_state.processing = False
                 st.error(f"Engine failed to load: {st.session_state.engine_error}")
+        # During processing, stop rendering to prevent welcome page
+        # buttons from lingering in the browser while LLM is working
+        if st.session_state.processing:
+            st.stop()
 
 else:
     # ── WELCOME PAGE (only when chat is empty) ────────────────────
@@ -839,7 +843,7 @@ else:
             <h2>Meet PegaPal</h2>
             <p>
                 Your AI-powered companion for everything Pega.
-                Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()}+ expert documents</strong> and growing with community contributions.
+                Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()} expert documents</strong> and growing with community contributions.
             </p>
         </div>""", unsafe_allow_html=True)
 
