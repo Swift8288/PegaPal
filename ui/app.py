@@ -668,9 +668,13 @@ def _on_chat_submit():
 
 # ── Main Chat Area ────────────────────────────────────────────────────
 
-if st.session_state.messages:
-    # ── CHAT MODE ─────────────────────────────────────────────────────
+# Placeholder for suggestion buttons — MUST be before if/else so
+# .empty() runs before any blocking LLM call in chat mode.
+_suggestions_area = st.empty()
 
+if st.session_state.messages:
+    # ── CHAT MODE — clear suggestion buttons immediately ──────────────
+    _suggestions_area.empty()
 
     # Compact header with integrated Home button
     st.markdown(f"""<div class="main-header">
@@ -911,41 +915,36 @@ else:
 
         st.divider()
 
-# ── Suggestion Buttons (in a clearable placeholder) ───────────────────
-_suggestions_area = st.empty()
+        # Render suggestion buttons into the placeholder created BEFORE the if/else
+        with _suggestions_area.container():
+            st.markdown("#### 💡 Try one of these to get started:")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.button("🔴 What is PEGA0001?", use_container_width=True,
+                           on_click=_send_question, args=("What does PEGA0001 alert mean and how to fix it?",))
+            with col2:
+                st.button("🔧 NullPointerException", use_container_width=True,
+                           on_click=_send_question, args=("How to debug NullPointerException in Pega activity?",))
+            with col3:
+                st.button("⚡ Activity vs Data Transform", use_container_width=True,
+                           on_click=_send_question, args=("When should I use Activity vs Data Transform?",))
+            with col4:
+                st.button("🔒 Auth Failures", use_container_width=True,
+                           on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
 
-if not st.session_state.messages:
-    with _suggestions_area.container():
-        st.markdown("#### 💡 Try one of these to get started:")
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.button("🔴 What is PEGA0001?", use_container_width=True,
-                       on_click=_send_question, args=("What does PEGA0001 alert mean and how to fix it?",))
-        with col2:
-            st.button("🔧 NullPointerException", use_container_width=True,
-                       on_click=_send_question, args=("How to debug NullPointerException in Pega activity?",))
-        with col3:
-            st.button("⚡ Activity vs Data Transform", use_container_width=True,
-                       on_click=_send_question, args=("When should I use Activity vs Data Transform?",))
-        with col4:
-            st.button("🔒 Auth Failures", use_container_width=True,
-                       on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
-
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.button("📊 Explain Data Pages", use_container_width=True,
-                       on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",))
-        with col2:
-            st.button("🤖 Pega RPA Overview", use_container_width=True,
-                       on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
-        with col3:
-            st.button("✨ Pega Constellation", use_container_width=True,
-                       on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
-        with col4:
-            st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
-                       on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
-else:
-    _suggestions_area.empty()
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.button("📊 Explain Data Pages", use_container_width=True,
+                           on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",))
+            with col2:
+                st.button("🤖 Pega RPA Overview", use_container_width=True,
+                           on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
+            with col3:
+                st.button("✨ Pega Constellation", use_container_width=True,
+                           on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
+            with col4:
+                st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
+                           on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
 
 # ── Chat Input (always at the bottom) ─────────────────────────────────
 st.chat_input(
