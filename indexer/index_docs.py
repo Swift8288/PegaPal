@@ -370,6 +370,9 @@ class PegaIndexer:
         """
         Index a single document (dict with 'url', 'title', 'content').
         Returns number of chunks added.
+
+        Documents are stored in lowercase for case-insensitive keyword search.
+        Original text is preserved in metadata['original_text'] for display.
         """
         chunks = chunk_text(doc["content"])
         if not chunks:
@@ -377,15 +380,23 @@ class PegaIndexer:
 
         ids = [f"{doc['url']}::chunk_{i}" for i in range(len(chunks))]
         metadatas = [
-            {"url": doc["url"], "title": doc.get("title", ""), "chunk_index": i}
-            for i in range(len(chunks))
+            {
+                "url": doc["url"],
+                "title": doc.get("title", ""),
+                "chunk_index": i,
+                "original_text": chunk,  # preserve original case for display
+            }
+            for i, chunk in enumerate(chunks)
         ]
 
         embeddings = self.embedder.embed(chunks)
 
+        # Store lowercase documents for case-insensitive $contains search
+        lowercase_chunks = [c.lower() for c in chunks]
+
         self.collection.upsert(
             ids=ids,
-            documents=chunks,
+            documents=lowercase_chunks,
             embeddings=embeddings,
             metadatas=metadatas,
         )
@@ -482,6 +493,8 @@ class PegaIndexer:
             self.embedder.build_idf(all_chunks_flat)
 
         # ── Pass 2: Embed and index each document ──
+        # Store lowercase documents for case-insensitive keyword search.
+        # Original text preserved in metadata for display.
         total_chunks = 0
         for doc, chunks, filename in all_docs:
             if not chunks:
@@ -489,14 +502,20 @@ class PegaIndexer:
 
             ids = [f"{doc['url']}::chunk_{i}" for i in range(len(chunks))]
             metadatas = [
-                {"url": doc["url"], "title": doc.get("title", ""), "chunk_index": i}
-                for i in range(len(chunks))
+                {
+                    "url": doc["url"],
+                    "title": doc.get("title", ""),
+                    "chunk_index": i,
+                    "original_text": chunk,
+                }
+                for i, chunk in enumerate(chunks)
             ]
             embeddings = self.embedder.embed(chunks)
+            lowercase_chunks = [c.lower() for c in chunks]
 
             self.collection.upsert(
                 ids=ids,
-                documents=chunks,
+                documents=lowercase_chunks,
                 embeddings=embeddings,
                 metadatas=metadatas,
             )
@@ -504,6 +523,61 @@ class PegaIndexer:
 
         logger.info(f"Indexing complete — {total_chunks} total chunks from {len(json_files)} files")
         return total_chunks
+
+    def _build_title_vocab(self):
+        """
+        Build a vocabulary of searchable terms from all indexed document titles.
+        Called once and cached. This means ANY new KB document's title terms
+        are automatically searchable — no hardcoded patterns needed.
+        """
+        if hasattr(self, '_title_vocab') and self._title_vocab:
+            return self._title_vocab
+
+        # Common English stop words to exclude
+        stop_words = {
+            'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to',
+            'for', 'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were',
+            'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
+            'will', 'would', 'could', 'should', 'may', 'might', 'can',
+            'that', 'this', 'these', 'those', 'it', 'its',
+            'not', 'no', 'nor', 'as', 'if', 'then', 'than', 'too', 'very',
+            'all', 'each', 'every', 'both', 'few', 'more', 'most', 'other',
+            'some', 'such', 'only', 'own', 'same', 'so', 'about', 'up',
+            'out', 'how', 'what', 'which', 'who', 'whom', 'why', 'where',
+            'when', 'here', 'there', 'into', 'through', 'during', 'before',
+            'after', 'above', 'below', 'between', 'under', 'over',
+            'completing', 'configuring', 'creating', 'using', 'working',
+            'managing', 'defining', 'adding', 'setting', 'complete', 'guide',
+            'overview', 'introduction', 'getting', 'started', 'tab', 'form',
+            'page', 'new', 'pega', 'platform',
+        }
+
+        title_terms = set()
+        try:
+            # Get all unique titles from the collection metadata
+            results = self.collection.get(include=["metadatas"], limit=10000)
+            for meta in results.get("metadatas", []):
+                title = meta.get("title", "")
+                # Extract meaningful words (3+ chars, not stop words)
+                words = re.findall(r'[a-zA-Z]{3,}', title)
+                for word in words:
+                    if word.lower() not in stop_words and len(word) >= 4:
+                        title_terms.add(word.lower())
+
+                # Also extract multi-word phrases from titles (bigrams)
+                title_lower = title.lower()
+                # Extract "Word Word" patterns as phrases
+                bigrams = re.findall(r'[a-z]{3,}\s+[a-z]{3,}', title_lower)
+                for bg in bigrams:
+                    parts = bg.split()
+                    if parts[0] not in stop_words and parts[1] not in stop_words:
+                        title_terms.add(bg)
+        except Exception as e:
+            logger.debug(f"Title vocab build: {e}")
+
+        self._title_vocab = title_terms
+        logger.info(f"Built title vocabulary: {len(title_terms)} searchable terms")
+        return self._title_vocab
 
     def search(self, query: str, top_k: int = 5) -> list[dict]:
         """
@@ -514,8 +588,11 @@ class PegaIndexer:
           - Content match (keyword found in chunk text):   distance = 0.25
           - Vector match (TF-IDF cosine similarity):       actual distance
 
-        This ensures that a query like "PEGA0001" finds the actual PEGA0001
-        document first, not random docs that mention it in passing.
+        Keywords are extracted automatically from:
+          1. PEGA alert codes (PEGA0001, etc.)
+          2. Technical patterns (CamelCase, abbreviations, hyphenated terms)
+          3. ANY word that appears in indexed document titles — this means
+             new KB documents are automatically searchable without code changes.
         """
         hits = []
         seen_ids = set()
@@ -526,96 +603,65 @@ class PegaIndexer:
         alert_codes = re.findall(r'PEGA\d{4}', query_upper)
         # Known Pega abbreviations
         pega_abbrevs = re.findall(
-            r'\b(?:DSS|SMA|PAL|PDN|SLA|NBA|RAP|PRPC|PDC|DX\s*API)\b', query_upper
+            r'\b(?:DSS|SMA|PAL|PDN|SLA|NBA|RAP|PRPC|PDC|DX\s*API|FIPS|CSP|CRUD|BIX|OLAP)\b', query_upper
         )
         # Technical terms: CamelCase identifiers (NullPointerException, IndexOutOfBounds)
         camel_case = re.findall(r'[A-Z][a-z]+(?:[A-Z][a-z]+)+', query)
-        # Hyphenated Pega terms (Obj-Save, Obj-Browse)
+        # Hyphenated Pega terms (Obj-Save, Obj-Browse, next-best-action)
         hyphenated = re.findall(r'[A-Za-z]+-[A-Za-z]+', query)
-        # Known Pega multi-word concepts (case-insensitive matching)
-        pega_concepts = []
-        concept_patterns = [
-            r'data\s+pages?', r'data\s+transforms?', r'queue\s+processors?',
-            r'service\s+levels?', r'work\s*(?:list|basket|queue)',
-            r'case\s+types?', r'decision\s+tables?', r'decision\s+trees?',
-            r'when\s+rules?', r'declare\s+expressions?', r'declare\s+pages?',
-            r'clipboard', r'requestor', r'agent\s+schedules?',
-            r'flow\s+actions?', r'user\s+interface', r'section\s+rules?',
-            r'harness', r'portal', r'skin\s+rules?', r'constellation',
-            r'deployment\s+manager', r'prediction\s+studio',
-            r'next[\s\-]*best[\s\-]*action', r'customer\s+decision\s+hub',
-            r'oauth', r'saml', r'ldap', r'sso', r'authentication',
-            r'authorization', r'encryption',
-            r'soap', r'rest(?:ful)?', r'kafka', r'jms', r'mq',
-            r'elasticsearch', r'search\s+and\s+reporting',
-            r'ci[\s/]*cd', r'devops', r'docker', r'kubernetes',
-            r'tracer', r'log\s+files?', r'pegalog', r'pegaalert',
-            r'connect[\s\-]*(?:rest|soap|cmis|sap|dotnet)',
-            r'rpa', r'robotic\s+(?:process\s+)?automation', r'robot\s+studio',
-            r'robot\s+manager', r'workforce\s+intelligence',
-            r'attended\s+robot', r'unattended\s+robot',
-            r'knowledge\s+buddy', r'genai', r'gen\s*ai', r'blueprint',
-            r'autopilot', r'auto\s*pilot', r'pega\s+infinity',
-            r'case\s+management', r'guardrails', r'app\s+studio',
-            r'dev\s+studio', r'admin\s+studio',
-            r'constellation', r'theme\s+cosmos', r'ui[\s\-]*kit',
-            r'adaptive\s+model', r'interaction\s+history',
-            r'data\s+flow', r'data\s+set', r'event\s+strateg',
-            r'proposition', r'scorecard', r'decision\s+strateg',
-            r'cassandra', r'hazelcast', r'tomcat',
-            r'insights?\s+and\s+reporting', r'explore\s+data',
-            r'bix', r'report\s+definition', r'report\s+browser',
-            r'ruleset', r'rule\s+resolution', r'circumstanc',
-            r'checkin|checkout|check[\s\-]*in|check[\s\-]*out',
-            r'passivation', r'quiesc', r'node\s+classification',
-            r'helm\s+chart', r'docker', r'kubernetes', r'k8s',
-            r'split[\s\-]*schema', r'hotfix', r'prconfig',
-            r'web\s+embed', r'design\s+token', r'localization',
-            r'accessib', r'section', r'layout', r'portal',
-        ]
+
+        # ── Auto-keyword extraction from document titles ──
+        # Match any query word (4+ chars) that appears in KB document titles.
+        # This means "blueprint", "autopilot", "constellation", "cassandra",
+        # etc. are ALL automatically searchable because they appear in titles.
+        title_vocab = self._build_title_vocab()
         query_lower = query.lower()
-        for pattern in concept_patterns:
-            matches = re.findall(pattern, query_lower)
-            pega_concepts.extend(matches)
+        query_words = re.findall(r'[a-z]{4,}', query_lower)
+        auto_keywords = [w for w in query_words if w in title_vocab]
+
+        # Also match multi-word phrases from the query against title bigrams
+        for bigram in title_vocab:
+            if ' ' in bigram and bigram in query_lower:
+                auto_keywords.append(bigram)
 
         keyword_terms = list(set(
-            alert_codes + pega_abbrevs + camel_case + hyphenated + pega_concepts
+            alert_codes + pega_abbrevs + camel_case + hyphenated + auto_keywords
         ))
 
         # ── Step 2: Keyword-filtered search ──
+        # Documents are stored in lowercase, so we only need one lowercase search per term.
         if keyword_terms:
             query_embedding = self.embedder.embed([query])[0]
             for term in keyword_terms:
-                # Try both original case and uppercase for $contains
-                for search_term in set([term, term.upper(), term.lower()]):
-                    try:
-                        kw_results = self.collection.query(
-                            query_embeddings=[query_embedding],
-                            n_results=top_k * 2,  # fetch more to find title matches
-                            where_document={"$contains": search_term},
-                            include=["documents", "metadatas", "distances"],
-                        )
-                        for i in range(len(kw_results["ids"][0])):
-                            doc_id = kw_results["ids"][0][i]
-                            if doc_id in seen_ids:
-                                continue
-                            seen_ids.add(doc_id)
+                search_term = term.lower()
+                try:
+                    kw_results = self.collection.query(
+                        query_embeddings=[query_embedding],
+                        n_results=top_k * 2,  # fetch more to find title matches
+                        where_document={"$contains": search_term},
+                        include=["documents", "metadatas", "distances"],
+                    )
+                    for i in range(len(kw_results["ids"][0])):
+                        doc_id = kw_results["ids"][0][i]
+                        if doc_id in seen_ids:
+                            continue
+                        seen_ids.add(doc_id)
 
-                            title = kw_results["metadatas"][0][i].get("title", "")
-                            # Title match = highest priority
-                            if search_term.upper() in title.upper():
-                                boost_dist = 0.05
-                            else:
-                                boost_dist = 0.25
+                        title = kw_results["metadatas"][0][i].get("title", "")
+                        # Title match = highest priority
+                        if search_term in title.lower():
+                            boost_dist = 0.05
+                        else:
+                            boost_dist = 0.25
 
-                            hits.append({
-                                "id": doc_id,
-                                "document": kw_results["documents"][0][i],
-                                "metadata": kw_results["metadatas"][0][i],
-                                "distance": boost_dist,
-                            })
-                    except Exception as e:
-                        logger.debug(f"Keyword filter for '{search_term}': {e}")
+                        hits.append({
+                            "id": doc_id,
+                            "document": kw_results["documents"][0][i],
+                            "metadata": kw_results["metadatas"][0][i],
+                            "distance": boost_dist,
+                        })
+                except Exception as e:
+                    logger.debug(f"Keyword filter for '{search_term}': {e}")
 
         # ── Step 3: Standard vector search to fill remaining slots ──
         query_embedding = self.embedder.embed([query])[0]
@@ -637,7 +683,15 @@ class PegaIndexer:
 
         # Sort by distance (best matches first) and return top_k
         hits.sort(key=lambda h: h["distance"])
-        return hits[:top_k]
+        final = hits[:top_k]
+
+        # Restore original-case text for LLM context (stored in metadata)
+        for hit in final:
+            original = hit["metadata"].get("original_text")
+            if original:
+                hit["document"] = original
+
+        return final
 
     def stats(self) -> dict:
         """Return collection statistics."""
