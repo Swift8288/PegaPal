@@ -244,10 +244,19 @@ st.markdown("""
         color: #64748b !important;
     }
     /* ── Hide Streamlit toolbar (Deploy + dev menu) — shown only for admins ── */
-    .stDeployButton, [data-testid="stToolbar"] button[kind="header"],
-    .stAppDeployButton, header[data-testid="stHeader"] .stDeployButton,
-    [data-testid="stToolbar"], [data-testid="stMainMenu"] {
+    .stDeployButton,
+    .stAppDeployButton,
+    header[data-testid="stHeader"] .stDeployButton,
+    [data-testid="stMainMenu"],
+    [data-testid="stToolbar"] button[kind="header"] {
         display: none !important;
+    }
+    /* ── Keep sidebar toggle visible ── */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"] {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     /* ── Prevent Streamlit re-render visual artifacts ── */
@@ -491,9 +500,11 @@ with st.sidebar:
 
             # Show Deploy button + dev menu only for admins
             st.markdown("""<style>
-                .stDeployButton, [data-testid="stToolbar"] button[kind="header"],
-                .stAppDeployButton, header[data-testid="stHeader"] .stDeployButton,
-                [data-testid="stToolbar"], [data-testid="stMainMenu"] {
+                .stDeployButton,
+                .stAppDeployButton,
+                header[data-testid="stHeader"] .stDeployButton,
+                [data-testid="stMainMenu"],
+                [data-testid="stToolbar"] button[kind="header"] {
                     display: flex !important;
                 }
             </style>""", unsafe_allow_html=True)
