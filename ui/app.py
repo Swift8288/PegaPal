@@ -911,6 +911,11 @@ else:
 
         st.divider()
 
+# ── Suggestion Buttons (in a clearable placeholder) ───────────────────
+_suggestions_area = st.empty()
+
+if not st.session_state.messages:
+    with _suggestions_area.container():
         st.markdown("#### 💡 Try one of these to get started:")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -939,8 +944,8 @@ else:
         with col4:
             st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
                        on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
-
-
+else:
+    _suggestions_area.empty()
 
 # ── Chat Input (always at the bottom) ─────────────────────────────────
 st.chat_input(
