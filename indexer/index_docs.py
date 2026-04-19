@@ -329,21 +329,38 @@ class PegaIndexer:
 
     def __init__(self, backend: Optional[str] = None):
         CHROMA_DIR.mkdir(parents=True, exist_ok=True)
-        self.client = chromadb.PersistentClient(path=str(CHROMA_DIR))
-        # Use a no-op embedding function to prevent ChromaDB from
-        # loading its default sentence-transformers model.
-        # We provide our own embeddings via self.embedder.
-        self.collection = self.client.get_or_create_collection(
-            name=CHROMA_COLLECTION,
-            metadata={"hnsw:space": "cosine"},
-            embedding_function=_NoOpEmbeddingFunction(),
-        )
+        try:
+            self._open_chroma()
+        except Exception as e:
+            # ChromaDB version mismatch — delete and rebuild from raw docs
+            logger.warning(f"ChromaDB open failed ({e}), rebuilding from scratch...")
+            import shutil
+            if CHROMA_DIR.exists():
+                shutil.rmtree(CHROMA_DIR)
+            CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+            self._open_chroma()
+            # Rebuild index from raw docs
+            self.embedder = get_embedder(backend)
+            total = self.index_directory(RAW_DOCS_DIR)
+            logger.info(f"Auto-rebuilt index: {total} chunks from raw docs")
+            return
         self.embedder = get_embedder(backend)
         logger.info(
             f"Indexer ready — collection '{CHROMA_COLLECTION}' "
             f"({self.collection.count()} existing docs), "
             f"backend={backend or EMBEDDING_BACKEND}"
         )
+
+    def _open_chroma(self):
+        """Open ChromaDB client and collection."""
+        self.client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+        self.collection = self.client.get_or_create_collection(
+            name=CHROMA_COLLECTION,
+            metadata={"hnsw:space": "cosine"},
+            embedding_function=_NoOpEmbeddingFunction(),
+        )
+        # Test that the DB actually works (catches schema mismatches)
+        self.collection.count()
 
     def index_document(self, doc: dict) -> int:
         """
