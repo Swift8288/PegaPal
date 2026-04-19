@@ -312,13 +312,21 @@ def get_engine():
 def get_kb_doc_count():
     """Get the number of documents in the knowledge base (raw docs + community)."""
     try:
+        import json as _json
         from config import RAW_DOCS_DIR, COMMUNITY_DOCS_DIR
-        count = len(list(RAW_DOCS_DIR.glob("*.json")))
+        count = 0
+        for jf in RAW_DOCS_DIR.glob("*.json"):
+            try:
+                with open(jf, "r", encoding="utf-8") as f:
+                    data = _json.load(f)
+                count += len(data) if isinstance(data, list) else 1
+            except Exception:
+                count += 1
         if COMMUNITY_DOCS_DIR.exists():
             count += len(list(COMMUNITY_DOCS_DIR.glob("*.json")))
         return count
     except Exception:
-        return 230  # fallback
+        return 145  # fallback
 
 
 def get_community_indexer():
