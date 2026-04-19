@@ -890,34 +890,39 @@ else:
 
         st.divider()
 
-        st.markdown("#### 💡 Try one of these to get started:")
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.button("🔴 What is PEGA0001?", use_container_width=True,
-                       on_click=_send_question, args=("What does PEGA0001 alert mean and how to fix it?",))
-        with col2:
-            st.button("🔧 NullPointerException", use_container_width=True,
-                       on_click=_send_question, args=("How to debug NullPointerException in Pega activity?",))
-        with col3:
-            st.button("⚡ Activity vs Data Transform", use_container_width=True,
-                       on_click=_send_question, args=("When should I use Activity vs Data Transform?",))
-        with col4:
-            st.button("🔒 Auth Failures", use_container_width=True,
-                       on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
+        suggestions = st.container()
+        with suggestions:
+            st.markdown("#### 💡 Try one of these to get started:")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.button("🔴 What is PEGA0001?", use_container_width=True,
+                           on_click=_send_question, args=("What does PEGA0001 alert mean and how to fix it?",))
+            with col2:
+                st.button("🔧 NullPointerException", use_container_width=True,
+                           on_click=_send_question, args=("How to debug NullPointerException in Pega activity?",))
+            with col3:
+                st.button("⚡ Activity vs Data Transform", use_container_width=True,
+                           on_click=_send_question, args=("When should I use Activity vs Data Transform?",))
+            with col4:
+                st.button("🔒 Auth Failures", use_container_width=True,
+                           on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
 
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.button("📊 Explain Data Pages", use_container_width=True,
-                       on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",))
-        with col2:
-            st.button("🤖 Pega RPA Overview", use_container_width=True,
-                       on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
-        with col3:
-            st.button("✨ Pega Constellation", use_container_width=True,
-                       on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
-        with col4:
-            st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
-                       on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.button("📊 Explain Data Pages", use_container_width=True,
+                           on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",))
+            with col2:
+                st.button("🤖 Pega RPA Overview", use_container_width=True,
+                           on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
+            with col3:
+                st.button("✨ Pega Constellation", use_container_width=True,
+                           on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
+            with col4:
+                st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
+                           on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
+        # Clear the suggestions container once a button is clicked
+        if st.session_state.messages:
+            suggestions.empty()
 
 
 
