@@ -916,8 +916,8 @@ else:
             st.button("✨ Pega Constellation", use_container_width=True,
                        on_click=_send_question, args=("What is Pega Constellation UI architecture and how does it differ from Traditional UI?",))
         with col4:
-            st.button("📦 Deployment Manager", use_container_width=True,
-                       on_click=_send_question, args=("How to use Pega Deployment Manager for CI/CD?",))
+            st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
+                       on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
 
 
 
