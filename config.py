@@ -3,6 +3,7 @@ PegaPal — Central Configuration
 """
 
 import os
+import shutil
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -11,7 +12,17 @@ load_dotenv()
 # ── Paths ──────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-CHROMA_DIR = DATA_DIR / "chroma_db"
+_CHROMA_SRC = DATA_DIR / "chroma_db"
+
+# On Streamlit Cloud, the app dir is read-only / has SQLite locking issues.
+# Copy ChromaDB to /tmp/ so SQLite can acquire write locks.
+if os.environ.get("STREAMLIT_SHARING_MODE") or os.path.exists("/mount/src"):
+    _CHROMA_TMP = Path("/tmp/chroma_db")
+    if not _CHROMA_TMP.exists() and _CHROMA_SRC.exists():
+        shutil.copytree(_CHROMA_SRC, _CHROMA_TMP)
+    CHROMA_DIR = _CHROMA_TMP
+else:
+    CHROMA_DIR = _CHROMA_SRC
 RAW_DOCS_DIR = DATA_DIR / "raw_docs"
 COMMUNITY_DOCS_DIR = DATA_DIR / "community_docs"
 COMMUNITY_META_FILE = DATA_DIR / "community_meta.json"
