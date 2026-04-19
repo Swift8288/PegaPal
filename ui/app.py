@@ -668,8 +668,13 @@ def _on_chat_submit():
 
 # ── Main Chat Area ────────────────────────────────────────────────────
 
+# Placeholder for suggestion buttons — cleared when chat is active
+_suggestions_placeholder = st.empty()
+
 if st.session_state.messages:
-    # ── CHAT MODE ─────────────────────────────────────────────────────
+    # ── CHAT MODE — clear any lingering welcome page content ──────────
+    _suggestions_placeholder.empty()
+
 
     # Compact header with integrated Home button
     st.markdown(f"""<div class="main-header">
@@ -723,10 +728,6 @@ if st.session_state.messages:
             elif st.session_state.engine_error:
                 st.session_state.processing = False
                 st.error(f"Engine failed to load: {st.session_state.engine_error}")
-        # During processing, stop rendering to prevent welcome page
-        # buttons from lingering in the browser while LLM is working
-        if st.session_state.processing:
-            st.stop()
 
 else:
     # ── WELCOME PAGE (only when chat is empty) ────────────────────
@@ -914,8 +915,7 @@ else:
 
         st.divider()
 
-        suggestions = st.container()
-        with suggestions:
+        with _suggestions_placeholder.container():
             st.markdown("#### 💡 Try one of these to get started:")
             col1, col2, col3, col4 = st.columns(4)
             with col1:
@@ -944,9 +944,6 @@ else:
             with col4:
                 st.button("🧠 Pega GenAI & Blueprint", use_container_width=True,
                            on_click=_send_question, args=("What is Pega GenAI and Blueprint? Explain Knowledge Buddy, Autopilot, and how Blueprint works.",))
-        # Clear the suggestions container once a button is clicked
-        if st.session_state.messages:
-            suggestions.empty()
 
 
 
