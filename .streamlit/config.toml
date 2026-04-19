@@ -1,0 +1,21 @@
+[server]
+headless = true
+port = 8501
+enableCORS = false
+runOnSave = false
+
+[client]
+showSidebarNavigation = false
+
+[runner]
+fastReruns = true
+
+[theme]
+primaryColor = "#f97316"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f8fafc"
+textColor = "#1e293b"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false

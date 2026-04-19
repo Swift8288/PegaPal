@@ -1,0 +1,33 @@
+# ── Secrets & Environment ──
+.env
+.streamlit/secrets.toml
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+.~lock.*
+
+# ── Temp/Test files ──
+tour_mockup.html
+tour_mockup.jsx
+test_upload_doc.txt
+Pega_KB_Coverage_Map.xlsx
+
+# ── Large model files (not needed for tfidf backend) ──
+*.bin
+*.pt
+*.onnx

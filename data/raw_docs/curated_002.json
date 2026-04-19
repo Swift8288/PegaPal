@@ -1,0 +1,6 @@
+{
+  "url": "https://docs.pega.com/bundle/platform/page/platform/pxref/objdelete-method.html",
+  "title": "Obj-Delete Method Reference",
+  "content": "# Obj-Delete Method Reference\n\n## Overview\nObj-Delete removes a row from the PegaRULES database corresponding to a clipboard page.\n\n## Key Parameters\n- **PageName**: The clipboard page whose database row should be deleted\n- **Immediate**: If true, executes immediately without waiting for Commit\n\n## Common Errors\n\n### \"Cannot delete: lock not held\"\n**Root Cause**: Attempting to delete a lockable object without first acquiring a lock.\n**Fix**: Use Obj-Open with Lock=True before calling Obj-Delete.\n\n### \"Referential integrity violation\"\n**Root Cause**: Other records in the database reference the object being deleted (foreign key constraint).\n**Fix**:\n1. Delete dependent records first\n2. Check for references in assignment, history, and attachment tables\n3. Consider using a status-based soft delete instead\n\n## Best Practices\n- Always lock before deleting lockable objects\n- Delete child/embedded objects before parent objects\n- Use Obj-Delete-By-Handle for batch deletions\n- Wrap in try-catch for production robustness\n",
+  "content_length": 1026
+}

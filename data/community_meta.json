@@ -1,0 +1,38 @@
+{
+  "uploads": [
+    {
+      "filename": "_ Support Center.pdf",
+      "contributor": "Shourya",
+      "file_size": 254018,
+      "doc_id": "community_1776560891_0005e9a152",
+      "uploaded_at": "2026-04-18T20:08:11.008015",
+      "status": "approved",
+      "scan_warnings": [],
+      "approved_at": "2026-04-18T20:09:42.857158",
+      "chunks": 21
+    }
+  ],
+  "pending_uploads": [],
+  "rejected_uploads": [
+    {
+      "filename": "_ Support Center.pdf",
+      "contributor": "Shourya",
+      "file_size": 254018,
+      "doc_id": "community_1776560448_0005e9a152",
+      "uploaded_at": "2026-04-18T20:00:48.255102",
+      "status": "rejected",
+      "scan_warnings": [],
+      "rejected_at": "2026-04-18T20:09:23.233517",
+      "reject_reason": "Rejected by admin"
+    }
+  ],
+  "total_docs": 1,
+  "total_chunks": 21,
+  "contributors": {
+    "Shourya": {
+      "docs": 1,
+      "chunks": 21
+    }
+  },
+  "last_refresh": null
+}

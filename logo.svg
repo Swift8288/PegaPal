@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" width="300" height="320">
+  <!-- Orange chat bubble (behind, left) -->
+  <rect x="30" y="60" width="140" height="120" rx="20" fill="#f97316" />
+  <polygon points="60,180 80,180 55,210" fill="#f97316" />
+
+  <!-- Blue/purple chat bubble (front, right) -->
+  <rect x="120" y="40" width="150" height="130" rx="22" fill="#4f46e5" />
+  <polygon points="220,170 240,170 250,200" fill="#4f46e5" />
+
+  <!-- Antenna on blue bubble -->
+  <line x1="195" y1="40" x2="195" y2="12" stroke="#f97316" stroke-width="5" stroke-linecap="round" />
+  <circle cx="195" cy="8" r="8" fill="#f97316" />
+
+  <!-- Eyes on blue bubble (square/rounded) -->
+  <rect x="155" y="75" width="26" height="26" rx="5" fill="#ffffff" />
+  <rect x="195" y="75" width="26" height="26" rx="5" fill="#ffffff" />
+
+  <!-- Pupils -->
+  <rect x="162" y="82" width="12" height="12" rx="3" fill="#1e293b" />
+  <rect x="202" y="82" width="12" height="12" rx="3" fill="#1e293b" />
+
+  <!-- Mouth on blue bubble -->
+  <rect x="168" y="118" width="40" height="6" rx="3" fill="#ffffff" opacity="0.9" />
+
+  <!-- Small dots on orange bubble (simpler face) -->
+  <circle cx="75" cy="110" r="8" fill="#ffffff" opacity="0.9" />
+  <circle cx="105" cy="110" r="8" fill="#ffffff" opacity="0.9" />
+  <rect x="78" y="133" width="25" height="5" rx="2.5" fill="#ffffff" opacity="0.9" />
+
+  <!-- Text: PEGA PAL -->
+  <text x="150" y="260" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="48" fill="#f97316" letter-spacing="3">PEGA PAL</text>
+
+  <!-- Text: CHAT BOT -->
+  <text x="150" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="24" fill="#4f46e5" letter-spacing="6">CHAT BOT</text>
+</svg>
