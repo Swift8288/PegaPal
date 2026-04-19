@@ -14,15 +14,29 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 _CHROMA_SRC = DATA_DIR / "chroma_db"
 
-# On Streamlit Cloud, the app dir is read-only / has SQLite locking issues.
-# Copy ChromaDB to /tmp/ so SQLite can acquire write locks.
-if os.environ.get("STREAMLIT_SHARING_MODE") or os.path.exists("/mount/src"):
-    _CHROMA_TMP = Path("/tmp/chroma_db")
-    if not _CHROMA_TMP.exists() and _CHROMA_SRC.exists():
-        shutil.copytree(_CHROMA_SRC, _CHROMA_TMP)
-    CHROMA_DIR = _CHROMA_TMP
-else:
-    CHROMA_DIR = _CHROMA_SRC
+# On Streamlit Cloud, the app dir may be read-only or have SQLite locking
+# issues.  Detect cloud by checking for /mount/src OR a non-writable data dir,
+# then copy ChromaDB to /tmp/ so SQLite can acquire write locks.
+def _resolve_chroma_dir():
+    """Return a writable ChromaDB path, copying to /tmp if necessary."""
+    # Quick check: can we write to the source directory?
+    try:
+        test_file = _CHROMA_SRC / ".write_test"
+        _CHROMA_SRC.mkdir(parents=True, exist_ok=True)
+        test_file.touch()
+        test_file.unlink()
+        return _CHROMA_SRC  # Local / writable — use as-is
+    except (OSError, PermissionError):
+        pass
+    # Fallback: copy to /tmp
+    tmp = Path("/tmp/chroma_db")
+    if not tmp.exists() and _CHROMA_SRC.exists():
+        shutil.copytree(_CHROMA_SRC, tmp)
+    elif not tmp.exists():
+        tmp.mkdir(parents=True, exist_ok=True)
+    return tmp
+
+CHROMA_DIR = _resolve_chroma_dir()
 RAW_DOCS_DIR = DATA_DIR / "raw_docs"
 COMMUNITY_DOCS_DIR = DATA_DIR / "community_docs"
 COMMUNITY_META_FILE = DATA_DIR / "community_meta.json"
