@@ -309,6 +309,18 @@ def get_engine():
     return st.session_state.engine
 
 
+def get_kb_doc_count():
+    """Get the number of documents in the knowledge base (raw docs + community)."""
+    try:
+        from config import RAW_DOCS_DIR, COMMUNITY_DOCS_DIR
+        count = len(list(RAW_DOCS_DIR.glob("*.json")))
+        if COMMUNITY_DOCS_DIR.exists():
+            count += len(list(COMMUNITY_DOCS_DIR.glob("*.json")))
+        return count
+    except Exception:
+        return 230  # fallback
+
+
 def get_community_indexer():
     """Lazy-load the community indexer."""
     if st.session_state.community_indexer is None:
@@ -719,13 +731,13 @@ else:
         {
             "icon": "📚", "title": "Learn Concepts",
             "subtitle": "Ask about any Pega topic — get clear explanations",
-            "desc": "Ask about Data Pages, Activities, Data Transforms, Flows, Case Management, or any Pega concept. PegaPal pulls from 230+ expert documents to give you accurate, detailed explanations with examples and best practices.",
+            "desc": f"Ask about Data Pages, Activities, Data Transforms, Flows, Case Management, or any Pega concept. PegaPal pulls from {get_kb_doc_count()}+ expert documents to give you accurate, detailed explanations with examples and best practices.",
             "tips": ["Try 'Explain Data Pages' or 'Activity vs Data Transform'", "Ask follow-up questions to dive deeper", "Compare concepts: 'SOAP vs REST in Pega'"],
             "color": "#f59e0b", "bg": "#fffbeb",
         },
         {
             "icon": "🔍", "title": "Search the Knowledge Base",
-            "subtitle": "230+ docs on Pega topics — always up to date",
+            "subtitle": f"{get_kb_doc_count()}+ docs on Pega topics — always up to date",
             "desc": "The knowledge base covers Case Management, RPA, DevOps, Security, Integrations (REST/SOAP/Kafka), Authentication (LDAP/SSO/OAuth), UI/Constellation, and more. Every answer includes source citations with match percentages so you know how relevant the information is.",
             "tips": ["Check the Sources section for match quality", "95%+ match = highly relevant answer", "Includes Community Wiki content"],
             "color": "#3b82f6", "bg": "#eff6ff",
@@ -819,7 +831,7 @@ else:
             <h2>Meet PegaPal</h2>
             <p>
                 Your AI-powered companion for everything Pega.
-                Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>230+ expert documents</strong> and growing with community contributions.
+                Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()}+ expert documents</strong> and growing with community contributions.
             </p>
         </div>""", unsafe_allow_html=True)
 
@@ -837,9 +849,9 @@ else:
                 design patterns — get clear explanations with examples.</p>
             </div>""", unsafe_allow_html=True)
         with col3:
-            st.markdown("""<div class="feature-card card-orange">
+            st.markdown(f"""<div class="feature-card card-orange">
                 <h4>🏗️ Full Coverage</h4>
-                <p><strong>230+ docs</strong> on Case Mgmt, AI/ML, RPA, Mobile, DevOps,
+                <p><strong>{get_kb_doc_count()}+ docs</strong> on Case Mgmt, AI/ML, RPA, Mobile, DevOps,
                 Security, Community Wiki, and all PEGA alerts.</p>
             </div>""", unsafe_allow_html=True)
         with col4:
