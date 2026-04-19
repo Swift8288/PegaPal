@@ -322,13 +322,14 @@ def estimate_confidence(hits: list[dict]) -> str:
 
     best_distance = hits[0]["distance"]
 
-    # Thresholds calibrated for TF-IDF and SBERT with real user queries:
+    # Thresholds calibrated for TF-IDF with real user queries:
     # - Users type abbreviated errors ("index of outbound" vs "IndexOutOfBoundsException")
     # - Short queries (3-5 words) naturally score lower similarity
-    # - 35%+ match (distance < 0.65) reliably pulls relevant context
-    if best_distance < 0.65:
+    # - With 18+ comprehensive KB docs, broad topic queries reliably pull relevant context
+    # - 25%+ match (distance < 0.75) reliably pulls relevant context for good answers
+    if best_distance < 0.75:
         return "HIGH"
-    elif best_distance < 0.82:
+    elif best_distance < 0.90:
         return "MEDIUM"
     else:
         return "LOW"
