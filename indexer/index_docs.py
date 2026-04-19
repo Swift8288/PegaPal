@@ -392,6 +392,61 @@ class PegaIndexer:
 
         return len(chunks)
 
+    @staticmethod
+    def _normalize_doc(raw: dict, filename: str) -> list[dict]:
+        """
+        Convert any JSON KB format into a list of indexable docs
+        (each with 'url', 'title', 'content').
+
+        Supports two formats:
+          1. Legacy: {'url', 'title', 'content'} — passed through as-is.
+          2. Topics/QA: {'title', 'topics': [...], 'qa_pairs': [...]}
+             — each topic becomes a separate doc, QA pairs become one doc.
+        """
+        # Legacy format — already has 'content'
+        if "content" in raw:
+            if "url" not in raw:
+                raw["url"] = f"kb://{filename}"
+            return [raw]
+
+        # Topics + QA pairs format (from official PDF extractions)
+        docs = []
+        base_title = raw.get("title", filename)
+        source = raw.get("source", "")
+        version = raw.get("version", "")
+
+        # Each topic becomes a separate indexable document
+        for i, topic in enumerate(raw.get("topics", [])):
+            topic_name = topic.get("topic", f"Topic {i+1}")
+            content = topic.get("content", "")
+            if content:
+                header = f"{base_title} — {topic_name}"
+                if version:
+                    header += f" ({version})"
+                docs.append({
+                    "url": f"kb://{filename}#topic-{i}",
+                    "title": header,
+                    "content": f"{topic_name}\n\n{content}",
+                })
+
+        # QA pairs as a combined document
+        qa_pairs = raw.get("qa_pairs", [])
+        if qa_pairs:
+            qa_content_parts = []
+            for qa in qa_pairs:
+                q = qa.get("question", "")
+                a = qa.get("answer", "")
+                if q and a:
+                    qa_content_parts.append(f"Q: {q}\nA: {a}")
+            if qa_content_parts:
+                docs.append({
+                    "url": f"kb://{filename}#qa",
+                    "title": f"{base_title} — Q&A",
+                    "content": "\n\n".join(qa_content_parts),
+                })
+
+        return docs
+
     def index_directory(self, docs_dir: Path = RAW_DOCS_DIR) -> int:
         """
         Index all JSON doc files in a directory. Returns total chunks.
@@ -409,7 +464,11 @@ class PegaIndexer:
         for jf in json_files:
             with open(jf, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            docs = data if isinstance(data, list) else [data]
+            # Normalize: handle both list and single-doc formats
+            raw_list = data if isinstance(data, list) else [data]
+            docs = []
+            for raw in raw_list:
+                docs.extend(self._normalize_doc(raw, jf.stem))
             for doc in docs:
                 chunks = chunk_text(doc["content"])
                 all_docs.append((doc, chunks, jf.name))

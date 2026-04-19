@@ -319,7 +319,13 @@ def get_kb_doc_count():
             try:
                 with open(jf, "r", encoding="utf-8") as f:
                     data = _json.load(f)
-                count += len(data) if isinstance(data, list) else 1
+                if isinstance(data, list):
+                    count += len(data)
+                elif "topics" in data:
+                    # Topics/QA format: count topics + 1 for QA
+                    count += len(data.get("topics", [])) + (1 if data.get("qa_pairs") else 0)
+                else:
+                    count += 1
             except Exception:
                 count += 1
         if COMMUNITY_DOCS_DIR.exists():
