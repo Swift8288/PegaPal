@@ -485,7 +485,7 @@ with st.sidebar:
         <strong>Debug errors:</strong> Paste the full error message or PEGA alert code directly in the chat.
     </div>""", unsafe_allow_html=True)
     st.markdown("""<div class="tip-box">
-        <strong>Learn concepts:</strong> Ask "Explain data pages" or "Activity vs Data Transform" for clear explanations.
+        <strong>Learn concepts:</strong> Ask "Explain data pages" or "Decisioning & NBA" for clear explanations.
     </div>""", unsafe_allow_html=True)
     st.markdown("""<div class="tip-box">
         <strong>Contribute:</strong> Upload your troubleshooting notes, runbooks, or Pega guides to grow the KB!
@@ -746,7 +746,7 @@ else:
             "icon": "📚", "title": "Learn Concepts",
             "subtitle": "Ask about any Pega topic — get clear explanations",
             "desc": f"Ask about Data Pages, Activities, Data Transforms, Flows, Case Management, or any Pega concept. PegaPal pulls from {get_kb_doc_count()}+ expert documents to give you accurate, detailed explanations with examples and best practices.",
-            "tips": ["Try 'Explain Data Pages' or 'Activity vs Data Transform'", "Ask follow-up questions to dive deeper", "Compare concepts: 'SOAP vs REST in Pega'"],
+            "tips": ["Try 'Explain Data Pages' or 'Decisioning & NBA'", "Ask follow-up questions to dive deeper", "Compare concepts: 'SOAP vs REST in Pega'"],
             "color": "#f59e0b", "bg": "#fffbeb",
         },
         {
@@ -929,8 +929,8 @@ else:
                 st.button("🔧 NullPointerException", use_container_width=True,
                            on_click=_send_question, args=("How to debug NullPointerException in Pega activity?",))
             with col3:
-                st.button("⚡ Activity vs Data Transform", use_container_width=True,
-                           on_click=_send_question, args=("When should I use Activity vs Data Transform?",))
+                st.button("🎯 Decisioning & NBA", use_container_width=True,
+                           on_click=_send_question, args=("Explain Pega's Decision Strategy framework and Next-Best-Action — how does NBA work, what are adaptive models, and how does arbitration select the best action?",))
             with col4:
                 st.button("🔒 Auth Failures", use_container_width=True,
                            on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
