@@ -668,12 +668,13 @@ def _on_chat_submit():
 
 # ── Main Chat Area ────────────────────────────────────────────────────
 
-# Placeholder for suggestion buttons — MUST be before if/else so
-# .empty() runs before any blocking LLM call in chat mode.
+# Placeholders BEFORE if/else so .empty() runs before any blocking LLM call
+_hero_area = st.empty()
 _suggestions_area = st.empty()
 
 if st.session_state.messages:
-    # ── CHAT MODE — clear suggestion buttons immediately ──────────────
+    # ── CHAT MODE — clear welcome content immediately ─────────────────
+    _hero_area.empty()
     _suggestions_area.empty()
 
     # Compact header with integrated Home button
@@ -839,14 +840,16 @@ else:
     else:
         # ── WELCOME PAGE (enhanced hero + feature cards + KB overview) ──
 
-        st.markdown(f"""<div class="hero">
-            <div class="hero-logo">{logo(70, "hero")}</div>
-            <h2>Meet PegaPal</h2>
-            <p>
-                Your AI-powered companion for everything Pega.
-                Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()} expert documents</strong> and growing with community contributions.
-            </p>
-        </div>""", unsafe_allow_html=True)
+        # Render hero into the placeholder (above buttons)
+        with _hero_area.container():
+            st.markdown(f"""<div class="hero">
+                <div class="hero-logo">{logo(70, "hero")}</div>
+                <h2>Meet PegaPal</h2>
+                <p>
+                    Your AI-powered companion for everything Pega.
+                    Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()} expert documents</strong> and growing with community contributions.
+                </p>
+            </div>""", unsafe_allow_html=True)
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
