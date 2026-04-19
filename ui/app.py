@@ -847,7 +847,10 @@ else:
                 <h2>Meet PegaPal</h2>
                 <p>
                     Your AI-powered companion for everything Pega.
-                    Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()} expert documents</strong> and growing with community contributions.
+                    Debug errors, learn concepts, compare approaches, or explore any topic — powered by <strong>{get_kb_doc_count()} curated Pega documents</strong> and growing with community contributions.
+                </p>
+                <p style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">
+                    Unlike generic AI, PegaPal's answers are grounded in verified Pega documentation — specific property names, exact navigation paths, real troubleshooting patterns, and production-tested best practices.
                 </p>
             </div>""", unsafe_allow_html=True)
 
@@ -890,29 +893,32 @@ else:
             """)
         with col2:
             st.markdown("""
-            **🏛️ Platform Features**
-            - Case Management
-            - Data Pages & Transforms
-            - Flows & Assignments
-            - UI / Constellation
+            **🏛️ Platform & Architecture**
+            - Case Management deep dive
+            - Data Pages, Transforms & Types
+            - Declare Rules (expressions, triggers)
+            - Constellation UI / DX API
             - Reporting & Dashboards
+            - CLM / KYC Framework
             """)
         with col3:
             st.markdown("""
             **🔌 Integrations & AI**
             - REST / SOAP / Kafka / JMS
-            - SAP & Salesforce
-            - Prediction Studio & NBA
-            - GenAI & Knowledge Buddy
-            - RPA & Workforce Intel
+            - Decisioning & NBA
+            - Adaptive Models & Prediction Studio
+            - GenAI & Blueprint
+            - RPA & Customer Service
+            - Sales Automation & Marketing
             """)
         with col4:
             st.markdown("""
-            **🚀 DevOps & Security**
-            - CI/CD & Deployment
-            - Docker / Kubernetes
-            - Authentication (LDAP/SSO)
-            - Security alerts & auditing
+            **🚀 DevOps & Cloud**
+            - CI/CD & Deployment Manager
+            - Pega Cloud & PBKS (Kubernetes)
+            - Testing (PegaUnit, BDD)
+            - Security & Access Control
+            - RBAC, SAML SSO, OAuth
             - Upgrade & migration
             """)
 
@@ -932,8 +938,8 @@ else:
                 st.button("🎯 Decisioning & NBA", use_container_width=True,
                            on_click=_send_question, args=("Explain Pega's Decision Strategy framework and Next-Best-Action — how does NBA work, what are adaptive models, and how does arbitration select the best action?",))
             with col4:
-                st.button("🔒 Auth Failures", use_container_width=True,
-                           on_click=_send_question, args=("How to troubleshoot authentication failures in Pega?",))
+                st.button("🏦 KYC & CLM", use_container_width=True,
+                           on_click=_send_question, args=("Explain Pega CLM and KYC framework — client onboarding, due diligence levels, risk assessment, and screening process",))
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
