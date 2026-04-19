@@ -1,0 +1,130 @@
+{
+  "title": "Pega Platform '25 - User Experience",
+  "source": "Pega Platform '25 Official Documentation - User Experience (1463 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Pega UI Architectures Overview",
+      "content": "Pega Platform '25 offers two UI architectures: Constellation (latest, recommended for all new applications since '23) and Traditional UI (battle-tested, supports customization). Constellation provides low-code configuration, efficient development, and short time to value. Traditional UI can be expanded with Constellation components for staged migration. The selected architecture generates architecture-specific UI Rules — changing architecture requires significant manual reconfiguration. Updated naming conventions: Traditional UI uses 'Theme Cosmos' design system, 'Traditional DX API', and 'Traditional Starter Packs'. Constellation uses 'Constellation design system', 'Constellation DX API', and 'Constellation SDK'."
+    },
+    {
+      "topic": "Constellation UI Fundamentals",
+      "content": "Constellation UI is the modern, low-code UI architecture in Pega Platform. Key concepts include: Constellation taxonomy (components hierarchy), center-out configuration (data-driven UI generation), data visualization features, application UI setup, and best practices. Constellation supports choosing between different UI approaches based on application needs. Constellation follows a component-based architecture where the platform generates UI from the data model and case type configuration, reducing manual UI work. It provides pre-designed patterns that work together out of the box."
+    },
+    {
+      "topic": "Portals in Constellation",
+      "content": "Portals define the application shell and navigation for end users. The Channels landing page manages portal configurations. Creating a Constellation Portal involves configuring the portal shell, defining navigation menus, and setting up landing pages. Portal configuration includes: menu definition, landing pages (Home, custom pages), Home page welcome banner, Todo widget, and dashboard templates. Pega Platform '25 supports four landing page templates: tabbed, default (column-based with optional banner), and two dashboard templates. The default template supports drag-and-drop positioning of UI components in the Preview area."
+    },
+    {
+      "topic": "Views in Constellation",
+      "content": "Views display and collect information in applications. Key View types include: Full Page View (complete case display), Preview (quick-look panel), promoted Actions on Full Case View, and list Views. Configuration includes: setting up Full Page View layout, configuring Preview panels, adding widgets (Prediction, Related Cases, Tags, Stakeholders), configuring list Views with promoted filters, and managing run-time table behavior. Best practices for Constellation tables cover sorting, filtering, pagination, and record reordering. List Views support notifications about outdated data, record reordering, and available columns configuration."
+    },
+    {
+      "topic": "Fields and Controls in Constellation",
+      "content": "Constellation provides extensive field type support: Text fields (input, area), Boolean fields, Currency fields, Date Time fields, Decimal/Integer/Percentage fields, Location fields with maps, Phone fields, Picklist fields, URL and image fields, Address fields (specialized), and fields associated with Case and Data Objects. Reference field configurations include: single-record reference, list of records reference, search-and-select from external sources, many-to-many reference, and disabling additional refreshes. Embedded Data field configurations include: single-record, list of records, solo fields, and user reference fields. Each field type has specific presentation and validation options."
+    },
+    {
+      "topic": "Partial Views, Details Views, and Tabs",
+      "content": "Partial Views display a subset of case information, useful for summary panels and side information. Details Views present comprehensive read-only information about a case or data object. Tabs organize content within views for logical grouping. Configuration includes visibility conditions for Case Pages, which control when specific UI elements appear based on data conditions or user roles. These view types work together to create a complete case management experience."
+    },
+    {
+      "topic": "Themes and Design Tokens in Constellation",
+      "content": "Design tokens control the visual appearance of Constellation applications. The App Studio theme designer (Settings menu) includes settings for white space, background images/gradients, granular color control, and a quick Brand color for prototyping. Design tokens in Constellation cover: colors (primary, secondary, status colors), typography (font families, sizes, weights), spacing (padding, margins), borders (radius, width, style), and elevation (shadows). The login screen can be customized by editing source HTML, CSS text Rules, and background images. The browser requestor configuration controls login behavior."
+    },
+    {
+      "topic": "Accessibility in Constellation",
+      "content": "Constellation provides built-in accessibility features compliant with WCAG standards. Key features include: table navigation (keyboard-driven cell navigation), keyboard shortcuts for common actions, screen reader support, focus management, and ARIA attributes. Best practices include: using semantic heading levels, providing alt text for images, ensuring sufficient color contrast, supporting keyboard-only navigation, and testing with assistive technologies. Accessibility features ensure applications are usable by people with visual, auditory, motor, and cognitive disabilities."
+    },
+    {
+      "topic": "Internationalization and Localization",
+      "content": "Pega Platform supports internationalization (i18n) and localization (l10n) for global applications. Localization workflow: set prerequisites, create translation packages, send for translation, import translated packages. Dynamic messages support localized content that changes based on context. Labels can be overridden for specific locales. Localization Rules can be created manually for fine-grained control. Dynamic text Rules (new in '25) store and manage display text separate from data processing, supporting reuse, localization, rich text, and business logic (When Rules). Prerequisites and limitations apply to specific locale configurations."
+    },
+    {
+      "topic": "Web Embeds",
+      "content": "Web embeds allow Pega applications to be embedded within external websites or portals. Configuration includes: setting up the embed container, configuring communication between host and embedded app, supporting multiple embeds on the same page, and branding consistency. Authentication in web embeds uses token-based or SSO mechanisms. Third-party cookie handling is important for cross-domain scenarios. Best practices cover responsive design, consistent branding, and secure authentication patterns."
+    },
+    {
+      "topic": "Integrating Constellation Applications",
+      "content": "Constellation applications can be integrated with traditional UI and external systems. Adding traditional Case Types to Constellation applications allows gradual migration. Limitations exist when using traditional UI with Constellation. Traditional cases can be added as child cases in Constellation. Theme coordination in blended UI ensures visual consistency. Launching traditional pages from Constellation portals enables coexistence. SDKs integrate with external design systems. PCore and PConnect Public APIs enable custom UI development. The Constellation DX API provides programmatic access. DX components can be created for custom UI needs. The messaging service enables real-time communication."
+    },
+    {
+      "topic": "Migrating to Constellation UI",
+      "content": "Migration from traditional UI to Constellation involves: using the Constellation Modernization Assistant component to analyze applications, running analysis mode of the Application Modernization Assistant, and migrating applications step by step. The modernization assistant identifies UI elements that need updating, provides compatibility reports, and suggests migration paths. Migration considerations include: assessing custom UI code, evaluating section-to-view conversions, handling custom harnesses, and planning for feature parity between architectures."
+    },
+    {
+      "topic": "Traditional UI - Theme Cosmos",
+      "content": "Theme Cosmos is the design system for traditional UI applications. It provides a modern look and feel with a component-based approach. The taxonomy defines the hierarchy of UI elements. Core principles include responsive design, accessibility compliance, and consistent visual language. Design systems for traditional UI include Theme Cosmos and UI-Kit. Out-of-the-box tools provide pre-built UI components. Future-proof UI design guidelines help prepare for eventual Constellation migration."
+    },
+    {
+      "topic": "Traditional UI - Portals and Landing Pages",
+      "content": "Traditional UI portals include: configuring Work Queues in the Worklist widget, creating landing pages for applications, configuring tabbed landing pages, configuring dashboards (with template changes), configuring default landing pages, and removing landing pages. Navigation organization covers the main navigation for standard work portals. Containers in portals include dynamic containers, AJAX containers (with supported actions and limitations), and dialog container width adjustments. Portal customization includes theming and preview functionality for different devices (phone, tablet)."
+    },
+    {
+      "topic": "Traditional UI - Forms and Views",
+      "content": "App Studio forms include: Forms and Views in a Case context, managing Theme Cosmos UI settings in Case Designer, and the Preview panel for real-time visualization. UI components in a View include various controls (Button, Link, Anypicker, Autocomplete, Date Time, Dropdown, Radio Button, Checkbox, Attach Content, Map, Text input/area, Rich text editor with custom plugins, TinyMCE integration, Paragraphs). Configuration options cover common control settings, behavior definition, editing options, text/icon addition, and advanced presentation options including custom attributes for Traditional DX API."
+    },
+    {
+      "topic": "Layouts in Traditional UI",
+      "content": "Traditional UI layouts organize content structure: Dynamic Layout (flexible, responsive), Column Layout (multi-column), Navigational Tree Layout (sidebar navigation), Repeating Dynamic Layout (list items with operations, drag-and-drop, swipe actions for mobile), Layout Groups (tabbed/accordion grouping), Table Layout (data grids with optimized and non-optimized modes, search, toolbar actions, hierarchical tables), and Screen Layout (region-based with properties for General tab, upgrading from panel sets). Configuration includes presentation options, master-detail settings, field validation in hidden sections, and responsive behavior."
+    },
+    {
+      "topic": "Sections in Traditional UI",
+      "content": "Sections are the fundamental building blocks of traditional UI forms. Creating Sections involves: using embedded sections, full section editor, and reusable section patterns. Sections contain layouts, controls, and other sections for composing complex forms. They support circumstancing for variant UI based on conditions, and can reference Data Pages for dynamic data. Section includes functionality allows nesting and reuse across multiple views and case types."
+    },
+    {
+      "topic": "Data Sources for UI",
+      "content": "UI data sourcing in Pega involves multiple levels of configuration: Data Pages as primary data sources (most common pattern), Clipboard pages, Activities, and Connectors. Data Pages support multiple source types including database queries, connectors, activities, and GenAI. Configuration includes scope management (thread, requestor, node), refresh behavior, and parameterization. For Constellation, Data Pages power picklists, reference fields, tables, and dynamic content with automatic API exposure through the DX API."
+    },
+    {
+      "topic": "Constellation Troubleshooting",
+      "content": "Troubleshooting Constellation includes: localization issues (missing translations, incorrect locale settings), web embed problems (authentication, cookie handling, cross-origin), common issues (rendering, performance, compatibility), and debugging tools (UI Inspector for checking application configuration, console logging, network monitoring). Automated testing in Constellation supports unit and integration testing of UI components. Recommended workarounds address known platform limitations. Reducing server traffic covers optimizing UI refresh actions. The Constellation UI Service manages server-side rendering."
+    },
+    {
+      "topic": "PDF Generation in Constellation",
+      "content": "Constellation supports generating PDF documents from case data and views. This feature enables creating printable case summaries, reports, and formal documents directly from the application. Configuration involves selecting which views and data to include in the generated PDF, with options for layout, formatting, and branding consistency."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What are the two UI architectures in Pega Platform '25?",
+      "answer": "Pega Platform '25 offers Constellation (latest, recommended for all new apps since '23, low-code focused) and Traditional UI (mature, supports deeper customization). Constellation generates UI from data models with pre-designed patterns. Traditional UI uses Theme Cosmos design system and section-based forms. Constellation uses 'Constellation DX API' and 'Constellation SDK'; Traditional uses 'Traditional DX API' and 'Traditional Starter Packs'. Applications cannot easily switch between architectures."
+    },
+    {
+      "question": "How do you configure a Constellation Portal?",
+      "answer": "Create a Constellation Portal from the Channels landing page. Configuration includes: defining navigation menus, setting up landing pages (Home with welcome banner, Todo widget, custom pages), choosing from four landing page templates (tabbed, default, two dashboard types), configuring dashboard widgets, and setting up the portal shell appearance. The default template supports drag-and-drop positioning of UI components."
+    },
+    {
+      "question": "What field types does Constellation support?",
+      "answer": "Constellation supports: Text (input/area), Boolean, Currency, Date Time, Decimal, Integer, Percentage, Location (with maps), Phone, Picklist, URL, Image, and Address fields. Reference fields include: single-record, list of records, search-and-select from external sources, and many-to-many references. Embedded Data fields include: single-record, list of records, solo fields, and user reference fields. Each type has specific presentation, validation, and behavior configuration options."
+    },
+    {
+      "question": "How does localization work in Pega?",
+      "answer": "Localization workflow: set prerequisites, create translation packages (exported as files for translators), import translated packages back. Dynamic messages support context-dependent localized content. Labels can be overridden per locale. New in '25: Dynamic text Rules store display text separately from data, supporting reuse, localization, rich text, and business logic via When Rules. Manual localization Rules provide fine-grained control for specific scenarios."
+    },
+    {
+      "question": "What layouts are available in Pega Traditional UI?",
+      "answer": "Traditional UI layouts include: Dynamic Layout (flexible responsive), Column Layout (multi-column), Navigational Tree Layout (sidebar navigation), Repeating Dynamic Layout (list items with drag-and-drop, swipe actions for mobile), Layout Groups (tabbed/accordion grouping), Table Layout (optimized and non-optimized data grids with search, toolbar actions, hierarchical support), and Screen Layout (region-based). Each has specific presentation options and responsive behavior settings."
+    },
+    {
+      "question": "How do you migrate from Traditional UI to Constellation?",
+      "answer": "Use the Constellation Modernization Assistant to analyze your application and identify migration requirements. Run the Application Modernization Assistant in analysis mode for a compatibility report. Migration involves converting sections to views, updating custom UI code, handling custom harnesses, and ensuring feature parity. The process is incremental — you can use Constellation components within traditional applications as a staged approach before full migration."
+    },
+    {
+      "question": "What are design tokens in Constellation?",
+      "answer": "Design tokens control visual appearance: colors (primary, secondary, status), typography (fonts, sizes, weights), spacing (padding, margins), borders (radius, width, style), and elevation (shadows). The App Studio theme designer provides settings for white space, backgrounds, gradients, granular colors, and a quick Brand color for prototyping. Login screen customization is separate, involving HTML, CSS Rules, and background images."
+    },
+    {
+      "question": "How do web embeds work in Pega?",
+      "answer": "Web embeds allow embedding Pega applications in external websites. Configuration includes setting up embed containers, host-to-app communication, supporting multiple embeds per page, and branding. Authentication uses token-based or SSO mechanisms. Third-party cookie handling is important for cross-domain scenarios. Best practices include responsive design, consistent branding, and secure authentication. Troubleshooting covers authentication failures, cookie issues, and cross-origin problems."
+    },
+    {
+      "question": "What accessibility features does Constellation provide?",
+      "answer": "Constellation includes WCAG-compliant accessibility: keyboard navigation (table cells, form fields), keyboard shortcuts, screen reader support, focus management, ARIA attributes, semantic heading levels, alt text for images, sufficient color contrast, and keyboard-only navigation support. Best practices include testing with assistive technologies and following accessibility guidelines for custom components."
+    },
+    {
+      "question": "How do you troubleshoot Constellation UI issues?",
+      "answer": "Troubleshooting tools include: UI Inspector (checking application configuration and component tree), browser console logging, network request monitoring, and the Constellation debug tools. Common issues cover rendering problems, performance bottlenecks, localization mismatches, and web embed authentication failures. Automated testing supports unit and integration testing of UI components. Reducing server traffic can be optimized through UI refresh action configuration."
+    }
+  ]
+}

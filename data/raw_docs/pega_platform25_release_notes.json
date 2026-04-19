@@ -1,0 +1,122 @@
+{
+  "title": "Pega Platform '25 - Release Notes",
+  "source": "Pega Platform '25 Official Documentation - Platform '25 Release Notes (280 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Platform '25 Release Overview",
+      "content": "Pega Platform '25 is the latest Pega Infinity release, focused on streamlining end-to-end automation and incorporating generative AI. Major highlights include: new Pega GenAI features for design-time and run-time, improved Constellation UX, major infrastructure changes (containers only, no Hazelcast, Tomcat 10.1), FIPS 140-3 compliance mode for client-managed deployments, new Content Security Policy for Constellation UI portals, and Blueprint import process updates. The release impacts backward compatibility and requires preparation before update."
+    },
+    {
+      "topic": "Pega GenAI Features in '25",
+      "content": "Pega GenAI '25 introduces: Pega Autopilot in an interactive right-side pane that persists across App Studio context changes, automated Data Object and integration creation via natural language conversations, run-time Agents for natural language user interaction (starting Cases, running Automations/Flow Actions, retrieving data from buddies/Data Pages), attachment processing and analysis by Agents, GenAI Connect Rules for processing attachments to populate Case fields (with testing in App Studio and model comparison), and Knowledge Buddy as a Data Page source for enriching Case context."
+    },
+    {
+      "topic": "Constellation UX Improvements in '25",
+      "content": "Key Constellation UX updates: Landing pages reorganized to four templates (tabbed, default, two dashboards) with Default template supporting column-based UI and drag-and-drop layout positioning. Theme designer updated with white space, background images/gradients, granular color control, and quick Brand color for prototyping. New dynamic text Rules for managing non-data display text with reuse, localization, rich text, and When Rule support. Additional improvements across views, fields, and navigation."
+    },
+    {
+      "topic": "Infrastructure and Deployment Changes",
+      "content": "Critical infrastructure changes in '25: Tomcat 10.1 replaces Tomcat 9.x (impacts client code, both Pega Cloud and client-managed). Client-managed only: withdrawal of VM-based deployments (Docker images in containerized environments only, requires advanced Kubernetes knowledge), removal of Hazelcast (built-in alternatives for caching/clustering, must remove before update — Pega Cloud handles automatically). These changes require intensive planning, testing, and preparation time."
+    },
+    {
+      "topic": "FIPS 140-3 Compliance",
+      "content": "New in '25: client-managed deployments can be configured for FIPS 140-3 compliance (Federal Information Protection Standard). FIPS 140-3 is a U.S. government standard for cryptographic module security requirements in hardware, software, and firmware. It protects sensitive government information and controlled unclassified information (CUI). Clients must ensure underlying infrastructure meets FIPS 140-3 requirements. Defined by NIST (National Institute of Standards and Technology)."
+    },
+    {
+      "topic": "Content Security Policy for Constellation",
+      "content": "New CSP rule for Constellation UI Portals enables separate, stricter policies. New options in Script-Source and Style-Source directives: Nonce (random 128-bit identifier per page load, protects from inline attacks, Constellation-only), and Blob (Binary Large Object data type restriction). CSP can be set per Portal type (traditional vs Constellation). Security tab of Application Definition renamed to 'Content security policy' with mode options per Portal type. Both options are cleared by default for updates and new installs."
+    },
+    {
+      "topic": "Application Development Enhancements",
+      "content": "Low-code development improvements: enhanced Autopilot with interactive pane that persists across context changes, Blueprint Import Module updates for latest GenAI-driven improvements, new Application wizard enhancements, improved App Studio functionality, expanded citizen developer tools. Developers can now create and extend applications with greater AI assistance, including automated Data Object creation and natural language-driven configuration."
+    },
+    {
+      "topic": "Case Management Updates",
+      "content": "Case Management in '25 introduces enhancements to case processing, workflow automation, and user interaction. Improvements include better attachment handling with GenAI processing, enhanced case lifecycle management, and improved integration with Constellation UI for case views and actions. Updates to case processing leverage the new Pega GenAI capabilities for faster, more accurate case resolution."
+    },
+    {
+      "topic": "Conversational Channels and Digital Messaging",
+      "content": "Conversational Channels in '25 include updates to Digital Messaging and Mobile Messaging SDK. Digital Messaging enhancements improve real-time customer communication across channels. Mobile Messaging SDK updates provide better native mobile integration. These updates complement the new Agent capabilities for natural language customer interactions and automated task execution."
+    },
+    {
+      "topic": "Data and Integration Updates",
+      "content": "Data management improvements: GenAI as a Data Page source for AI-enriched data, Knowledge Buddy as a Data Page source, CRUD operations for Data Objects with nested data structures (embedded pages, page lists, reference fields) using PostgreSQL, improved Data Page restriction logic for Constellation security, and new DSS settings for nested data support. Integration enhancements improve connectivity with external systems."
+    },
+    {
+      "topic": "Decision Management Updates in '25",
+      "content": "Decision management updates include: Data Sets, Data Flows, and Strategies improvements, Prediction Studio enhancements for model management and MLOps, and withdrawn/deprecated features. Updates improve real-time decisioning capabilities, adaptive model performance, and integration between decision management components. Prediction Studio gains enhanced model lifecycle management and monitoring capabilities."
+    },
+    {
+      "topic": "DevOps and Automated Testing Updates",
+      "content": "DevOps improvements in '25 include enhanced CI/CD pipeline support, improved automated testing frameworks, and better deployment management. Updates support the new containerized deployment model and provide tools for testing applications during the migration to Pega Platform '25 infrastructure. Automated testing improvements ensure application quality across the updated platform."
+    },
+    {
+      "topic": "Mobile Updates",
+      "content": "Mobile improvements in '25 enhance native mobile app capabilities, Constellation mobile experience, and offline functionality. Updates include better mobile component rendering, improved mobile performance, and enhanced support for mobile-specific UI patterns. The Mobile Messaging SDK receives updates for improved real-time communication capabilities."
+    },
+    {
+      "topic": "Insights and Reporting Updates in '25",
+      "content": "Reporting improvements include enhanced Insights with new chart types and customization options, improved Explore Data functionality, better GenAI-powered Insight generation, and updated dashboard capabilities. Constellation-based reporting receives new features for interactive data visualization and analysis."
+    },
+    {
+      "topic": "Security Updates in '25",
+      "content": "Security enhancements: FIPS 140-3 compliance for client-managed deployments, new Content Security Policy with Nonce and Blob options for Constellation portals, separate CSP rules per Portal type (traditional vs Constellation), and improved security configuration UI in Dev Studio. Updates strengthen application security posture and compliance capabilities."
+    },
+    {
+      "topic": "System Administration Updates in '25",
+      "content": "System admin updates support the new infrastructure: containerized-only deployment, Hazelcast removal with built-in alternatives, Tomcat 10.1 migration support, and Kubernetes-focused management tools. Administration improvements include enhanced monitoring, logging, and node management for containerized environments."
+    },
+    {
+      "topic": "User Experience Updates in '25",
+      "content": "UX updates: four landing page templates (tabbed, default, two dashboards), enhanced theme designer with granular color control and Brand color prototyping, dynamic text Rules for non-data display text, improved Constellation components, and enhanced traditional-to-Constellation migration tools. The Modernization Assistant receives updates for better migration analysis and guidance."
+    },
+    {
+      "topic": "Withdrawn and Deprecated Features",
+      "content": "Platform '25 withdraws and deprecates several features: VM-based deployments (withdrawn, containers only), Hazelcast (removed, built-in alternatives), Tomcat 9.x support (withdrawn, Tomcat 10.1 only). Additional deprecated features span decision management, integration methods, and legacy UI components. Organizations should review the full list of withdrawn and deprecated features before planning their update."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What are the major changes in Pega Platform '25?",
+      "answer": "Major changes include: Pega GenAI features (Autopilot pane, Agents for natural language, GenAI Connect Rules), improved Constellation UX (4 landing page templates, enhanced theme designer, dynamic text Rules), critical infrastructure changes (Tomcat 10.1 only, no VM deployments, Hazelcast removed), FIPS 140-3 compliance for client-managed deployments, new Content Security Policy for Constellation, and Blueprint import process updates."
+    },
+    {
+      "question": "What infrastructure changes are required for Pega Platform '25?",
+      "answer": "Both Pega Cloud and client-managed: Tomcat 10.1 replaces Tomcat 9.x (impacts custom code). Client-managed only: VM-based deployments withdrawn (Docker containers in Kubernetes only), Hazelcast must be removed before update (Pega Cloud handles automatically). These require advanced Kubernetes knowledge, intensive planning and testing. Migration to containers may take significant time and resources."
+    },
+    {
+      "question": "What is new with Pega GenAI in Platform '25?",
+      "answer": "New features: Autopilot interactive pane (persists across App Studio context changes), automated Data Object/integration creation via natural language, run-time Agents (natural language interaction, Case creation, Automation execution, attachment processing), GenAI Connect Rules (process attachments to populate Case fields, testable in App Studio with model comparison), Knowledge Buddy as Data Page source, and GenAI as Data Page source."
+    },
+    {
+      "question": "What are the Constellation UX improvements in Platform '25?",
+      "answer": "Four landing page templates (tabbed, default with column-based UI and drag-and-drop, two dashboard types), enhanced theme designer (white space, backgrounds, gradients, granular colors, quick Brand color), dynamic text Rules (non-data display text with reuse, localization, rich text, When Rules), improved views and navigation, and updated Modernization Assistant for traditional-to-Constellation migration."
+    },
+    {
+      "question": "What is FIPS 140-3 compliance in Pega Platform '25?",
+      "answer": "New in '25: client-managed deployments can be configured for FIPS 140-3 compliance, a U.S. government standard (NIST) for cryptographic module security in hardware, software, and firmware. It protects sensitive government information and CUI. Clients must ensure their infrastructure meets FIPS 140-3 requirements. This is important for government agencies and organizations handling controlled information."
+    },
+    {
+      "question": "What Content Security Policy changes are in Platform '25?",
+      "answer": "New separate CSP rule for Constellation UI Portals with Nonce and Blob options. Nonce generates random 128-bit IDs per page load (protects from inline attacks, Constellation-only). Blob restricts data inline resources to Blob type. CSP can be set independently per Portal type. Security tab renamed to 'Content security policy' with mode options per Portal. Both new options default to off for updates and new installs."
+    },
+    {
+      "question": "What features are deprecated or withdrawn in Platform '25?",
+      "answer": "Withdrawn: VM-based deployments (containers only), Hazelcast (built-in alternatives), Tomcat 9.x support (10.1 only). These are breaking changes requiring preparation. Additional deprecations span decision management features, legacy integration methods (Connect-dotNet, Connect-EJB, Connect-File, etc.), and legacy UI components. Organizations must review the full deprecated features list before planning updates."
+    },
+    {
+      "question": "How do Pega Agents work in Platform '25?",
+      "answer": "Agents enable natural language interaction at runtime. Users converse with Agents to get support and information. Agents can: start Cases, run Automations or Flow Actions, retrieve information from buddies or Data Pages, and process/analyze uploaded attachments. They minimize human errors and save time through automated task execution. Agents integrate with GenAI capabilities for intelligent response generation."
+    },
+    {
+      "question": "What data management improvements are in Platform '25?",
+      "answer": "GenAI as Data Page source for AI-enriched data, Knowledge Buddy as Data Page source, CRUD operations for Data Objects with nested structures (embedded pages, page lists, reference fields) via PostgreSQL, improved Data Page restriction logic for Constellation security, and DSS settings for nested data. Integration improvements enhance connectivity with external systems."
+    },
+    {
+      "question": "What should I prepare before updating to Pega Platform '25?",
+      "answer": "Key preparations: 1) Update custom code for Tomcat 10.1 compatibility (namespace changes), 2) Client-managed: plan containerized deployment migration (Docker/Kubernetes), 3) Client-managed: remove Hazelcast from deployment, 4) Review withdrawn/deprecated features for impact, 5) Test applications thoroughly against new platform, 6) Plan sufficient time — migration may be extensive. FIPS 140-3 compliance is optional but requires infrastructure preparation if needed."
+    }
+  ]
+}

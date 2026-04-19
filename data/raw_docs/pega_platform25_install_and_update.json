@@ -1,0 +1,130 @@
+{
+  "title": "Pega Platform '25 — Install and Update",
+  "source": "Pega Platform '25 Install and Update Official Documentation (727 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Deployment Models and Overview",
+      "content": "Starting in Pega Platform '25, Pega exclusively supports a standardized container-based deployment model using Kubernetes. Two deployment models: 1) Pega Cloud services — Pega manages the platform, fastest time to value. 2) Client-managed cloud — clients manage orchestration, automation, and operation of containerized environments on validated infrastructure providers. The install and deploy process has stages: UNDERSTAND (architecture, distribution package, Docker images, GitHub resources), PREPARE (requirements, database, logging, downloads), INSTALL (Pega Rules into database), DEPLOY (Addons, Backing Services, Pega nodes into Kubernetes namespaces), POST-INSTALL (change admin password, configure DWA, install apps). Pega software versioning uses major-minor-patch numbering. Patch versions are released for 18 months after GA, followed by Extended Support."
+    },
+    {
+      "topic": "Infrastructure Changes in Pega Platform '25",
+      "content": "Pega Platform '25 introduces major infrastructure changes: 1) Externalization of services — embedded Kafka, Elasticsearch, and Cassandra deprecated in 8.8, no longer supported from '24.2; must use external services. 2) Containerized deployments only — VM-based deployments deprecated in 8.8, removed in '25. 3) Removal of Hazelcast — Pega '25 removes Hazelcast caching/clustering, uses built-in alternatives. 4) Tomcat 10.1 only — must update custom CodeSets and JARs from Java EE to Jakarta EE packages (Rules are auto-converted during update). Infrastructure evolution: '24.1 (external services optional, VMs optional), '24.2 (external services required, VMs optional), '25 (all external, containers required, no Hazelcast, Tomcat 10.1). Adoption path: update to '24.1 latest patch → externalize services → remove Hazelcast → shift VMs to containers → update to '25."
+    },
+    {
+      "topic": "Deployment Architecture",
+      "content": "Pega Platform is a distributed system deployed using Kubernetes. Architecture elements: Pega database (split-schema for Rules and Data), Pega nodes (pods in Kubernetes, organized into deployment tiers via Helm charts). Default node tiers: Web (foreground/WebUser nodes exposed to load balancer) and Batch (background processing nodes, not exposed). Backing services: Search and Reporting Service (SRS, multi-tenant intermediary between nodes and Elasticsearch) and Constellation services (UI push-updates). External services required: Kafka (streaming), Elasticsearch/OpenSearch (search/reporting), Cassandra (decision data store for CDH/Process AI). Addons: Traefik (load balancer), EFK logging (Elasticsearch-Fluentd-Kibana). Kubernetes objects: Pods, Services, ConfigMaps, Ingress. Recommended namespace separation: mypega (nodes), pegaaddons (addons), srs (Search and Reporting), constellation (Constellation services)."
+    },
+    {
+      "topic": "Split-Schema Database Architecture",
+      "content": "Pega Platform uses a split-schema database architecture that separates Rules and Data into distinct schemas, installed using only a single data source. The Rules schema stores all Pega Rules defining system behavior. The Data schema stores case data, work items, and operational data. Optionally, a separate customer data schema can be configured for non-Pega-specific data alongside Pega applications. If you plan to change from single-schema to split-schema, do so before beginning deployment. Supported database vendors: PostgreSQL, Microsoft SQL Server, Oracle. For each database type, specific configuration is required including JDBC drivers, connection properties, user permissions, and schema setup."
+    },
+    {
+      "topic": "Pega Distribution Package and Scripts",
+      "content": "The Pega Platform distribution package includes Rules/data and scripts for installation and management. Installation scripts: install.bat/install.sh (install Rules), generateddl.bat/sh (generate DDL schema file), generateudf.bat/sh (install user-defined functions). Update scripts: update.bat/update.sh (update to newer version). Management scripts: prpcUtils (complex distribution tasks via direct DB connection — export, import, migrate), prpcServiceUtils (same tasks via web service to running instance, supports async operations). Configuration files: setupDatabase.properties (DB connection for install/update), prpcUtils.properties, prpcServiceUtils.properties, connection.properties (multi-instance), migrateSystem.properties (migration config). Key prpcUtils arguments: import, export, migrate, expose, manageHotfixes, generateDDL, changeSystemName, updateDASS, primaryKeyUtility."
+    },
+    {
+      "topic": "Pega-Provided Docker Images",
+      "content": "Client-managed deployments use Pega-provided Docker images. Key images: platform/pega (runtime image for Pega nodes, based on Ubuntu LTS + OpenJDK + Tomcat, rebuilt daily with latest OS/Java patches), platform/installer (utility image to install/update Rules in database), platform-services/search-n-reporting-service (SRS for Elasticsearch), platform-services/search-n-reporting-service-os (SRS for OpenSearch), constellation-messaging (Constellation Messaging Service), front-end-app-platform/cdn-onprem (Constellation Pega Static Service for air-gapped deployments). Image naming: hostname/product/image:tag. Use matching version tags for platform/pega and platform/installer. Pega rebuilds images daily during active support, stops for releases out of Extended Support. Base image customization via pegasystems/pega-ready (Docker Pega Web Ready public GitHub repo)."
+    },
+    {
+      "topic": "Pega Helm Charts",
+      "content": "Pega Helm charts are open-source GitHub templates for deploying Pega Platform on Kubernetes. Main charts: Pega chart (deploys Pega nodes with tier config, DB connection, external services), Addons chart (load balancer, EFK logging, metrics), Backing Services chart (SRS + Constellation Messaging), SRS subchart, Constellation Messaging subchart, Installer subchart (installs Rules into DB). Chart files: README, values.yaml (parameters — values-large.yaml for advanced), Templates (Go template language for Kubernetes resources), Requirements (third-party dependencies). Addons support per environment: Minikube (Traefik + EFK + Metrics), EKS (ALB), GKE (Google Cloud LB), OpenShift (native), AKS (AGIC + Azure Monitor). Deploy order: 1) Create namespaces, 2) Deploy Addons, 3) Deploy Backing Services, 4) Deploy Pega Platform."
+    },
+    {
+      "topic": "Installing Pega Platform Rules",
+      "content": "Two methods to install Pega Rules into the database: 1) Command-line installation — configure setupDatabase.properties with JDBC connection details, schema names, and run install.bat/install.sh. Properties include: pega.jdbc.driver.jar, jdbc.url, jdbc.driverClassName, db.username, db.password, rules.schema.name, data.schema.name, customerdata.schema.name. 2) Pega Installer Docker image — use pega/installer image with Pega Helm chart; set actions.execute to 'install' or 'install-deploy'; configure jdbc section, docker registry, installer.image, installer.adminPassword, installer.systemName, installer.productionLevel (1=experimental, 2=development, 3=test, 4=preproduction, 5=production). Run: helm install <release> . --namespace <namespace> --values values.yaml. Monitor installer job logs for completion."
+    },
+    {
+      "topic": "Deploying Pega Platform Nodes",
+      "content": "Deploy Pega nodes using the Pega Helm chart with actions.execute set to 'deploy'. Configure tier section for node architecture: Web tier (replicas, ingress enabled, TLS, resources: 12Gi memory/3-4 CPU, HPA enabled, rolling update strategy with maxSurge=1/maxUnavailable=0) and Batch tier (similar resources, no ingress). Configure provider parameter for your Kubernetes environment. Configure external services connections: Kafka (stream section), Cassandra (cassandra/dds sections, required for CDH/Process AI only), SRS and Constellation. Deploy with: helm install mypega pega/pega --namespace mypega --values pega.yaml. Use PodDisruptionBudgets (PDB) for availability guarantees. Horizontal Pod Autoscaler (HPA) handles auto-scaling."
+    },
+    {
+      "topic": "Updating Pega Platform",
+      "content": "Two update methods: 1) Out-of-place with near zero-downtime (recommended) — uses 4 schemas: existing Data, existing Rules, new blank Rules, temporary Data. Process: configure HA cluster (disable rule saving), create temporary schemas, migrate Rules to new schema, update new Rules and temp Data schemas, import applications, update JARs for Tomcat 10.1, update Data schema, redeploy nodes, switch traffic, delete old schemas. Can use command-line or Pega Installer Docker image with Helm charts. 2) In-place with downtime — updates existing schemas directly, requires full backup, system offline during update. Update preparation: evaluate customizations, review components/third-party apps, review customized web.xml, run pre-update checkers, prepare testing strategy, create unlocked Rulesets. Post-update: review logs, update Constellation rules, lock/roll ruleset versions, run final rules conflict report."
+    },
+    {
+      "topic": "Update Strategy Best Practices",
+      "content": "Recommended 11-step update approach: 1) Clone staging environment and update it. 2) Synchronize Rules and test data using Deployment Manager update pipelines. 3) Perform compatibility testing and validation on cloned staging. 4) Update production environment Rules schema. 5) Optionally create temporary production URL for confidence check. 6) Make Go/NoGo decision. 7) Perform post-Go actions (delete temp URL, rolling restart). 8) Update non-production environments. 9) Import update fixes to non-production. 10) Delete old Rules schemas. 11) Delete cloned staging environment. Key: keep production running during update using out-of-place method. Use Deployment Manager for promoting fixes across environments."
+    },
+    {
+      "topic": "Patching Pega Platform",
+      "content": "Patching updates to a newer patch version within the same minor release. Process mirrors updating: prepare environment (evaluate customizations, review database, download resources), apply patch (in-place or out-of-place), post-patch tasks. Preparation includes: run pre-update checkers, review database configuration per vendor (MSSQL — check tempdb size, compatibility level 120; Oracle — verify privileges; PostgreSQL — verify version), back up database, prepare Pega resources (distribution package, Docker images, Helm charts). The same command-line scripts (update.bat/sh) and Docker installer image methods apply. Database connection pool settings should maintain stability during intensive processing."
+    },
+    {
+      "topic": "Applying Hotfixes",
+      "content": "Hotfixes are targeted fixes for specific issues. Hotfix workflow: download hotfix package from My Pega, verify authenticity (automatic certificate verification during install, or manual verification using third-party tools or Pega Keystore), apply database schema changes if included, install hotfix. Installation methods: from the UI (Dev Studio), via prpcServiceUtils (submitting request to active instance), or via prpcUtils (direct database connection). Hotfixes can be rolled back if issues arise. After testing, commit hotfixes to make them permanent. Hotfix certificate revocation checks can be disabled if needed. Schema changes in hotfixes require separate application using the provided scripts."
+    },
+    {
+      "topic": "Platform Support Guide — Databases",
+      "content": "Pega Platform '25 supports: PostgreSQL 14 (deprecated Q4 2025, EOL Nov 2026), PostgreSQL 15 (deprecated Q4 2026, EOL Nov 2027), PostgreSQL 16 (deprecated Q4 2027, EOL Nov 2028) — supported on Aurora, Amazon RDS, Azure, GCP. Microsoft SQL Server 2017 (compat level 2014, deprecated Q1 2027), MSSQL 2019 (deprecated Q1 2029, on Azure SQL Managed/DB, Amazon RDS), MSSQL 2022 (deprecated Q1 2032). Oracle 19c Long Term (deprecated Q4 2031, on Amazon RDS). Best practice: use the latest supported database version. For MSSQL, set compatibility level to 120 for datetime compatibility. MSSQL requires READ_COMMITTED_SNAPSHOT ON for row versioning."
+    },
+    {
+      "topic": "Platform Support — External Services",
+      "content": "External Cassandra support: Cassandra 4.0 (earliest Pega 8.7, deprecated Q3 2023), Cassandra 4.1 (earliest Pega 8.7), Cassandra 5.0 (earliest Pega '24.2). External Kafka support: Kafka 3.3.1 through 3.8.x with technology-based lifecycle. Kafka support spans from Pega Platform 8.4.2+. Java support follows vendor lifecycle. Pega will not support untested combinations of stack components even if individual components are supported. Pega typically supports later vendor versions even if not explicitly listed. Client-managed solutions require validated infrastructure providers. Pega Cloud Services have different platform choices managed by Pega."
+    },
+    {
+      "topic": "Constellation Service Deployment",
+      "content": "Constellation services support the Constellation UI in Pega Platform. Two services: 1) Constellation Pega Static Service — delivers static UI assets via CDN (https://release/constellation.pega.com); for air-gapped deployments, use the front-end-app-platform/cdn-onprem Docker image. Service Updates for Constellation are released independently. 2) Constellation Messaging Service — enables push-updates to keep the UI current; deployed via the Backing Services Helm chart's constellation-messaging subchart. Configuration via ConstellationPegaStaticURL and ConstellationMessageSvcHostPath dynamic system settings. Pega Cloud deployments automatically reference regional Constellation services. Deploy using: helm install backingservices pega/backingservices --namespace <namespace> --values backingservices.yaml."
+    },
+    {
+      "topic": "Primary Key Utility",
+      "content": "Starting in Pega Platform '25, primary key constraints are required for all database tables. The primaryKeyUtility (run via prpcUtils) creates primary key constraints for tables and removes duplicate records. Process: configure prpcUtils.properties with JDBC details and schema names, set primaryKey.dryRun=true for initial check (verifies storage space on MSSQL/Oracle, checks for duplicates), then run with dryRun=false. The utility selects the latest record based on pxCommitDateTime, pxSaveDateTime, or pxUpdateDateTime (descending priority). Duplicate records are preserved in backup tables (original_table_name + '_bkp' suffix). Troubleshooting: insufficient storage (increase space or move to larger server), missing date columns (manual rectification required), missing primary key columns (create class or add columns to match key definition)."
+    },
+    {
+      "topic": "Post-Installation and Post-Update Tasks",
+      "content": "Post-installation: change Pega Administrator password (administrator@pega.com) on first login — critical for security. Pega Administrator account protection ensures the admin account is secure. Configure Directed Web Access (public URL). Install Pega applications. Review log files for errors. Post-update: review update logs, update Constellation rules in applications, lock and roll ruleset versions, run final rules conflict report to identify conflicts with rules that cannot be overridden, run update utilities. Application Testing Tracker helps validate updates — configure environment, view validation results, resolve failures. Perform regression testing and use automated smoke test suites to reduce testing effort."
+    },
+    {
+      "topic": "Migrate Script for Out-of-Place Updates",
+      "content": "The migrate script (migrate.bat/migrate.sh) automates data movement for out-of-place updates. It handles: export of tables/data objects from source schema, generation and application of DDL to target schema, import of tables/data objects to target. Configuration via migrateSystem.properties: source and target JDBC connection details, driver class, database type (mssql/oracledate/postgres), schema names (rules + data for both source and target). Operational properties: pega.clone.generate.xml, pega.clone.create.ddl, pega.clone.apply.ddl (schema operations), pega.bulkmover.unload.db, pega.bulkmover.load.db (data movement), thread.pool.size (optimize worker threads), db.load.commit.rate (default 100). Alternative: double migration update minimizes hardware resource consumption when network I/O latency exists between existing and target DB servers."
+    },
+    {
+      "topic": "Restarting Nodes in Containerized Deployments",
+      "content": "In containerized Kubernetes deployments, restart Pega Platform nodes using Kubernetes commands and rolling restart strategies. Rolling restarts allow updating node configurations, applying maintenance, or completing Pega Platform updates without full downtime. The Pega Helm chart supports rolling update deployment strategy with configurable maxSurge (default: 1) and maxUnavailable (default: 0) parameters, ensuring at least one node is always available during restarts. Use kubectl commands to manage pod lifecycle. For HA environments, combine rolling restarts with quiesce for graceful node transitions."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What are the infrastructure requirements for Pega Platform '25?",
+      "answer": "Pega Platform '25 requires: 1) Containerized deployment on Kubernetes only — VM-based deployments are no longer supported. 2) External Kafka, Elasticsearch/OpenSearch, and Cassandra — embedded services removed. 3) No Hazelcast — removed in '25, uses built-in Pega alternatives. 4) Tomcat 10.1 only — custom CodeSets and JARs must be updated from Java EE to Jakarta EE packages. Supported databases: PostgreSQL 14-17, MSSQL 2017-2022 (compat level 120), Oracle 19c. Adoption path from older versions: update to '24.1 → externalize services one at a time → remove Hazelcast → move VMs to containers → update to '25."
+    },
+    {
+      "question": "How do you install Pega Platform in a Kubernetes environment?",
+      "answer": "Two methods: 1) Command-line — configure setupDatabase.properties with JDBC driver, URL, credentials, and schema names, then run install.bat/install.sh. 2) Pega Installer Docker image — use pega/installer image with Pega Helm chart; set actions.execute='install', configure jdbc section (url, driver, schemas), docker registry, installer.image, installer.adminPassword, installer.productionLevel (1-5). Run: helm install <release> . --namespace <namespace> --values values.yaml. Monitor installer job logs. After installation: change admin password, configure Directed Web Access, install Pega applications, review logs."
+    },
+    {
+      "question": "What is the Pega Platform deployment architecture?",
+      "answer": "Pega Platform uses a distributed Kubernetes architecture: Pega database (split-schema: Rules + Data), Pega nodes organized into tiers (Web tier for interactive users exposed to load balancer, Batch tier for background processing). Backing services: SRS (Search and Reporting Service, bridges to Elasticsearch) and Constellation services (UI updates). Required external services: Kafka (streaming), Elasticsearch/OpenSearch (search), Cassandra (for CDH/Process AI). Addons: Traefik load balancer, EFK logging. Recommended namespaces: mypega, pegaaddons, srs, constellation. All orchestrated via Pega Helm charts."
+    },
+    {
+      "question": "How do you perform an out-of-place update with near zero-downtime?",
+      "answer": "Out-of-place update uses 4 schemas: existing Data, existing Rules, new blank Rules, temporary Data. Steps: 1) Configure HA cluster settings (disable rule saving). 2) Create new blank Rules and temporary Data schemas. 3) Migrate Rules to new schema using migrate script. 4) Run update on new Rules and temp Data schemas. 5) Import applications and Rule changes. 6) Update JARs for Tomcat 10.1 (required for '25). 7) Update original Data schema. 8) Redeploy Pega Platform nodes pointing to new schemas. 9) Switch traffic. 10) Delete old Rules schema and temporary Data schema. Can be automated using Pega Installer Docker image and Helm charts."
+    },
+    {
+      "question": "What Docker images does Pega provide for deployments?",
+      "answer": "Key images: platform/pega (runtime for Pega nodes, Ubuntu LTS + OpenJDK + Tomcat, rebuilt daily with patches), platform/installer (installs/updates Rules in database), platform-services/search-n-reporting-service (SRS for Elasticsearch), platform-services/search-n-reporting-service-os (SRS for OpenSearch), constellation-messaging (Constellation Messaging Service), front-end-app-platform/cdn-onprem (Constellation Static Service for air-gapped deployments). Naming: hostname/product/image:tag. Use matching version tags for platform/pega and platform/installer. Customize base images via pegasystems/pega-ready GitHub repo."
+    },
+    {
+      "question": "What are the Pega Helm charts and how are they structured?",
+      "answer": "Pega Helm charts are open-source templates for Kubernetes deployment. Main charts: Pega (deploys nodes with tier config, DB connection, external services), Addons (load balancer, logging, metrics), Backing Services (SRS + Constellation Messaging), plus subcharts for SRS, Constellation Messaging, and Installer. Files include: values.yaml (parameters), Templates (Go templates for Kubernetes resources), Requirements (third-party dependencies). Addons vary by environment: Minikube uses Traefik+EFK, EKS uses ALB, AKS uses AGIC. Deploy order: create namespaces → deploy Addons → deploy Backing Services → deploy Pega Platform."
+    },
+    {
+      "question": "How do hotfixes work in Pega Platform?",
+      "answer": "Hotfixes are targeted fixes downloaded from My Pega. Process: verify authenticity (automatic certificate check, manual via third-party tools, or Pega Keystore), apply database schema changes if included, then install the hotfix. Three installation methods: from Dev Studio UI, via prpcServiceUtils (web service to running instance), or via prpcUtils (direct DB connection). Hotfixes can be rolled back if issues arise. After successful testing, commit hotfixes to make them permanent. Certificate revocation checks can be disabled if needed. Schema changes in hotfixes are applied separately using provided scripts."
+    },
+    {
+      "question": "What is the split-schema database architecture in Pega Platform?",
+      "answer": "Pega Platform uses a split-schema architecture separating Rules and Data into distinct database schemas, installed via a single data source. The Rules schema stores all Pega Rules defining system behavior. The Data schema stores case data, work items, and operational data. An optional customer data schema can be configured for non-Pega data. Starting in '25, primary key constraints are required for all tables — use the primaryKeyUtility (via prpcUtils) to create constraints and remove duplicates. Supported databases: PostgreSQL 14-17, MSSQL 2017-2022, Oracle 19c. Change from single to split-schema before deployment."
+    },
+    {
+      "question": "What is the recommended update strategy for Pega Platform?",
+      "answer": "The 11-step recommended approach: 1) Clone staging and update it. 2) Sync Rules/test data using Deployment Manager update pipelines. 3) Compatibility testing on cloned staging. 4) Update production Rules schema (out-of-place for near zero-downtime). 5) Create temporary production URL for confidence check. 6) Go/NoGo decision. 7) Post-Go: delete temp URL, rolling restart. 8) Update non-production environments. 9) Import update fixes to non-production. 10) Delete old Rules schemas. 11) Delete cloned staging. Before updating: evaluate customizations, review components, run pre-update checkers, prepare testing strategy."
+    },
+    {
+      "question": "What databases and external services does Pega Platform '25 support?",
+      "answer": "Databases: PostgreSQL 14/15/16/17 (on Aurora, Amazon RDS, Azure, GCP), MSSQL 2017/2019/2022 (Azure SQL Managed/DB, Amazon RDS, compat level 120), Oracle 19c (Amazon RDS). External Kafka: versions 3.3.1 through 3.8.x. External Elasticsearch/OpenSearch: supported via SRS. External Cassandra: 4.0, 4.1, 5.0 (required for CDH/Process AI only). Java follows vendor lifecycle. Tomcat 10.1 is the only supported application server. Pega will not support untested vendor combinations. Pega Cloud Services use Pega-managed infrastructure."
+    }
+  ]
+}

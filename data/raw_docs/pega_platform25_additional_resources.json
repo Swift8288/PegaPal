@@ -1,0 +1,106 @@
+{
+  "title": "Pega Platform '25 - Additional Resources",
+  "source": "Pega Platform '25 Official Documentation - Additional Resources (781 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Constellation Tutorials Overview",
+      "content": "Constellation tutorials cover practical UI configuration patterns for low-code development using both App Studio and Dev Studio. Key tutorials include: configuring dynamic field behavior (cascading drop-downs, conditional suggested values), using Data Objects to build complex UI, pre-selecting items on multi-select fields, adding rows to Embedded Data fields in pre-processing, configuring combo-boxes for manual lists, displaying links to Data Objects in tables, and validating Embedded Data tables (single row marking, total amount validation, unique values validation)."
+    },
+    {
+      "topic": "Constellation FAQ",
+      "content": "Comprehensive FAQ covering: General FAQ (common questions about Constellation capabilities and limitations), Adoption Strategies FAQ (migration planning, phased adoption, coexistence with traditional UI), Architecture FAQ (technical architecture decisions, performance, scalability), App Studio and Dev Studio FAQ (when to use which, capabilities of each), Data Model FAQ (best practices for data modeling in Constellation), Pega Agentic AI FAQ (GenAI capabilities, agents, automation). These FAQs provide guidance for teams evaluating or implementing Constellation."
+    },
+    {
+      "topic": "Activities and Methods Reference",
+      "content": "Activities are procedural automation units that execute steps sequentially. Key concepts include: creating activities (steps, methods, parameters), activity step configuration, calling other activities, using the Collect instruction, Java in activity steps, and Queue instruction for asynchronous execution. Activities are being deprecated in favor of Data Transforms and Automations for most use cases, but remain relevant for complex integrations and system-level operations."
+    },
+    {
+      "topic": "Connect Methods",
+      "content": "Connect methods enable integration with external systems: Connect-Cassandra (Cassandra database operations), Connect-REST (RESTful API calls — most common modern integration), Connect-SOAP (SOAP web services), Connect-HTTP (HTTP requests), Connect-SQL (direct database queries), Connect-JMS (Java Message Service), Connect-MQ (IBM MQ messaging), Connect-FTP (file transfer), Connect-HBase (HBase database). Deprecated methods include: Connect-dotNet, Connect-EJB, Connect-File, Connect-Java, Connect-JCA. Each method has specific configuration for service tab, mappings, and error handling."
+    },
+    {
+      "topic": "Data and Property Methods",
+      "content": "Data manipulation methods include: Obj-Browse (query objects with filters), Obj-Delete/Delete-By-Handle (remove objects), Obj-Filter (filter page lists), Obj-List-View (list view queries), Obj-Open/Open-By-Handle (retrieve objects), Obj-Save/Save-Cancel (persist objects), Obj-Refresh-And-Lock/Unlock (concurrency control). Property methods include: Property-Set (set values), Property-Remove (clear values), Property-Ref (reference properties), Property-Seek-Value (search in lists), Property-Map-DecisionTable/DecisionTree/Value (map from decision rules), Property-Set-Messages (validation messages), Property-Validate (validate values)."
+    },
+    {
+      "topic": "Flow and Process Methods",
+      "content": "Process control methods include: Flow-End (terminate a flow), Flow-New (start a new flow), History-Add (add audit history entries), History-List (retrieve history), Commit/Rollback (transaction control), End-Validate (trigger validation), Exit-Activity (stop activity execution). Thread methods include: Thread-Clear (clear thread data), Thread-Stop (stop thread execution), Wait (pause execution), Wait-For-Requestor (wait for async completion). These methods control workflow execution and transaction management."
+    },
+    {
+      "topic": "Rules Reference - Connectors and Services",
+      "content": "Connector rules define integration endpoints: Connect BPEL rules (business process integration with Methods and Deployment tabs), Connect Robot rules (RPA integration), Connect Cassandra rules (Cassandra database with Service and Mappings tabs), Connect CMIS rules (content management systems), Connect EJB rules (deprecated Enterprise JavaBeans), Connect HBase rules, Connect Java rules, Connect SQL rules (database queries with data mapping). Service rules expose Pega functionality: Service Java (deprecated), Service JSR94 (deprecated), Service MQ (IBM MQ integration with unit testing support)."
+    },
+    {
+      "topic": "Data Instances and Configuration",
+      "content": "Data instances store configuration and reference data: Calendar data instances (business calendars with schedules), Divisions (organizational units), Organizations (top-level organizational entities with Definition tab configuration), SMS accounts (messaging configuration), Web service policy instances, Broadcast data instances (system-wide notifications), Messages (user-facing text with categories, warning display, standard functions, legacy updates), Property aliases, Property Qualifier rules, Static Content Bundles, Text File rules, URL patterns for Cases, Function Alias rules, and Image Content instances."
+    },
+    {
+      "topic": "Properties and Class Management",
+      "content": "Properties define data fields in Pega classes. Creating properties involves: selecting property type (Single Value, Value List, Value Group, Page, Page List, Page Group), configuring on the General tab (legacy Rule form), setting up Page modes, advanced tab options, and optimization settings. The Class Management landing page provides a central interface for managing classes and their properties. List rules define picklist values. Edit Validate rules enforce data validation patterns. Properties support various data types, constraints, and expressions."
+    },
+    {
+      "topic": "Integration Connectors Landing Page",
+      "content": "The Integration Connectors landing page provides a central hub for managing all application integrations. It covers integrating applications with external resources, data mapping in services and connectors (bidirectional data transformation), and configuring connection settings. Integration patterns include REST, SOAP, database, messaging, and file-based connections. Best practices include using connection pooling, timeout configuration, retry policies, and circuit breaker patterns for resilient integrations."
+    },
+    {
+      "topic": "JSP Tags Reference",
+      "content": "JavaServer Page (JSP) tags provide low-level UI rendering control in traditional UI: pega:choose (conditional rendering), pega:chart (chart generation), pega:contentURL (URL generation), pega:dataGrid (grid rendering), pega:dsField/dsFields (data source fields), pega:file (file operations), pega:forEach (iteration), pega:include (include content), pega:listView (list rendering), pega:lookup (data lookup), pega:onlyonce (render once), pega:reference (property reference with indirect references), pega:save (save data), pega:URL (URL generation), pega:when (conditional logic), and pega:withElement (element context). JSP tags are being replaced by Constellation components in modern applications."
+    },
+    {
+      "topic": "Functions and Expression Builder",
+      "content": "Pega provides built-in functions for use in expressions, decision rules, and activities. The Expression Builder provides a visual interface for constructing expressions using available functions. Functions are organized by category and can be displayed in the Expression Builder. The eForm Rules accelerator helps with form generation from external form definitions. Function Alias rules provide named references to commonly used expressions."
+    },
+    {
+      "topic": "Feature Toggles and Utilities",
+      "content": "Feature toggles enable turning functionality on and off without code changes, useful for gradual rollouts and A/B testing. Converting from directives to JavaServer Pages tags helps modernize older UI code. Running upgrade utilities assists with platform version migrations. These tools support DevOps practices and platform maintenance."
+    },
+    {
+      "topic": "Spellchecker and Word Templates",
+      "content": "Spellchecker configuration includes Dictionaries tab (language dictionaries, custom dictionaries) and Properties tab (spellcheck behavior settings). Word templates define document generation templates for creating Word documents from Pega data. Both features support localization for multi-language applications and integrate with the correspondence management framework."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What Constellation tutorials are available in Pega Platform '25?",
+      "answer": "Key tutorials include: configuring dynamic field behavior (cascading drop-downs, conditional suggested values), using Data Objects to build complex UI, pre-selecting items on multi-select fields, adding rows to Embedded Data fields in pre-processing, configuring combo-boxes for manual lists, displaying links to Data Objects in tables, and validating Embedded Data tables (single row marking, total amount validation, unique values)."
+    },
+    {
+      "question": "What Connect methods are available for integration in Pega?",
+      "answer": "Active methods: Connect-REST (RESTful APIs, most common), Connect-SOAP (SOAP services), Connect-HTTP (HTTP requests), Connect-SQL (database queries), Connect-Cassandra (Cassandra DB), Connect-HBase (HBase DB), Connect-JMS (Java messaging), Connect-MQ (IBM MQ), Connect-FTP (file transfer). Deprecated: Connect-dotNet, Connect-EJB, Connect-File, Connect-Java, Connect-JCA. Each has specific Service tab, Mappings, and error handling configuration."
+    },
+    {
+      "question": "What are the key Obj- methods for data operations in Pega?",
+      "answer": "Key Obj- methods: Obj-Browse (query with filters), Obj-Open/Open-By-Handle (retrieve objects), Obj-Save/Save-Cancel (persist/discard changes), Obj-Delete/Delete-By-Handle (remove objects), Obj-Filter (filter page lists), Obj-List-View (list view queries), Obj-Refresh-And-Lock/Unlock (concurrency control), and Commit/Rollback (transaction management). These are used in activities for CRUD operations on Pega data."
+    },
+    {
+      "question": "What Property methods are available in Pega activities?",
+      "answer": "Property methods include: Property-Set (set values), Property-Remove (clear values), Property-Ref (reference properties), Property-Seek-Value (search in lists), Property-Map-DecisionTable (map from decision table), Property-Map-DecisionTree (map from decision tree), Property-Map-Value/ValuePair (map values), Property-Set-Messages (add validation messages), Property-Validate (run validation), Property-Set-Stream (set stream data), Property-Set-XML (set from XML), and Property-Set-Corr (set correspondence)."
+    },
+    {
+      "question": "What types of properties can you create in Pega?",
+      "answer": "Property types include: Single Value (scalar text, number, date, etc.), Value List (ordered list of single values), Value Group (key-value pairs), Page (embedded data object), Page List (ordered list of pages), and Page Group (keyed collection of pages). Configuration includes the General tab (type, constraints, default values), Page mode settings for page types, advanced options, and database optimization settings."
+    },
+    {
+      "question": "What are JSP tags in Pega and are they still used?",
+      "answer": "JSP tags provide low-level UI rendering in traditional UI: pega:choose (conditional), pega:chart (charts), pega:forEach (iteration), pega:include (content inclusion), pega:reference (property display), pega:when (conditional logic), pega:listView (lists), pega:lookup (data lookup), etc. They are being replaced by Constellation components in modern applications but remain relevant for traditional UI customization and legacy application maintenance."
+    },
+    {
+      "question": "What is the Constellation FAQ about?",
+      "answer": "The Constellation FAQ covers: General questions (capabilities, limitations), Adoption Strategies (migration planning, phased adoption, traditional UI coexistence), Architecture (technical decisions, performance, scalability), App Studio vs Dev Studio usage, Data Model best practices for Constellation, and Pega Agentic AI capabilities. It provides comprehensive guidance for teams evaluating or implementing Constellation architecture."
+    },
+    {
+      "question": "What data instances can be configured in Pega?",
+      "answer": "Data instances include: Calendar (business calendars with schedules), Division (organizational units), Organization (top-level entities), SMS accounts, Web service policies, Broadcast (system notifications), Messages (user-facing text with categories), Property aliases, Property Qualifier rules, Static Content Bundles, Text File rules, URL patterns for Cases, Function Alias rules, and Image Content instances. Each serves a specific configuration purpose."
+    },
+    {
+      "question": "How do activities work in Pega?",
+      "answer": "Activities execute steps sequentially with configurable methods. Each step can call methods (Obj-Save, Property-Set, Connect-REST, etc.), call other activities, use Java code, or use the Queue instruction for async execution. Activities support parameters, pages/classes context, and error handling. They are being deprecated in favor of Data Transforms and Automations for most use cases but remain for complex integrations and system operations."
+    },
+    {
+      "question": "What integration resources are available on the Connectors landing page?",
+      "answer": "The Integration Connectors landing page manages: REST connectors (most common), SOAP connectors, SQL connectors, Cassandra connectors, CMIS connectors (content management), Java connectors, HBase connectors, and service rules (MQ, Java, JSR94). Features include data mapping configuration, connection settings, pooling, timeouts, retry policies, and circuit breaker patterns for resilient integrations."
+    }
+  ]
+}

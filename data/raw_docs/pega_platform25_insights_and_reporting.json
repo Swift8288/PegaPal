@@ -1,0 +1,106 @@
+{
+  "title": "Pega Platform '25 - Insights and Reporting",
+  "source": "Pega Platform '25 Official Documentation - Insights and Reporting (381 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Insights and Reporting Overview",
+      "content": "Pega Platform '25 provides comprehensive reporting through Insights (modern, interactive) and Traditional Reports (classic, tabular). Insights offer customizable charts and tables that can be drilled down for specific information, shared with users, and embedded in landing pages. Traditional reports provide list reports (detailed columns) and summarized reports (statistics with static charts). Data extraction via BIX (Business Intelligence Exchange) integrates Pega data with external BI tools. Pega GenAI can generate AI-powered Insights from natural language queries."
+    },
+    {
+      "topic": "Insights",
+      "content": "Insights help explore and analyze application data (sales, orders, assignments). They transform data queries into tables or visualizations that can be shared and embedded in landing pages. Features include: filtering, sorting, grouping multiple data items, charting with drill-down capability, conditional formatting, reference points/benchmarks, and AI-powered generation via Pega GenAI. Pega includes numerous out-of-the-box Insights (e.g., 'Number of work items created daily'). Insights can use custom OLAP databases as data sources. Insights are accessible through the Explore Data functionality in both Constellation and Theme Cosmos environments."
+    },
+    {
+      "topic": "Explore Data",
+      "content": "Explore Data provides access to application data for analysis and visualization. Features include: accessing application data, viewing/customizing saved Insights, filtering/sorting/grouping data, exporting table-based Insights to Excel, creating new Insights, and sharing results. To use Explore Data: enable Constellation-based landing pages, add Explore Data to application navigation menu. Customization includes specifying objects (data types) available in Explore Data and enabling Explore Data in UI Kit applications. Explore Data serves as the hub for all Insight creation and management."
+    },
+    {
+      "topic": "Creating and Managing Insights",
+      "content": "Insights can be created in three ways: using Pega GenAI (natural language queries), from UI authoring (visual builder), or from Explore Data interface. Managing Insights includes saving, sharing, editing, duplicating, and deleting. Customizing table-based Insights involves: column selection, conditional formatting (color-coding based on rules), specifying custom details in objects. Customizing chart-based Insights includes: managing data series, color-coding appearance, benchmarking with reference points, grouping data, and configuring chart types. Adding Insights to applications embeds them in landing pages. Scheduling Insights enables automatic data refresh on defined intervals."
+    },
+    {
+      "topic": "Chart Types and Data Visualization",
+      "content": "Insights support multiple chart types for data visualization. Charts can be customized with data series management (adding, removing, configuring series), color-coding based on data values, reference points for benchmarking, and data grouping for segmentation. Charts in Insights are interactive — users can drill down to explore underlying data. In contrast, charts in traditional summarized reports are static. Configuration includes axis labels, legends, tooltips, and responsive sizing."
+    },
+    {
+      "topic": "Dashboards",
+      "content": "Dashboards provide a consolidated view of multiple Insights on a single page. Creating dashboards involves selecting Insights to display, configuring layout, and setting refresh behavior. Dashboards are accessible from landing pages and can be customized per user role. They support both Constellation and Traditional UI environments, with Constellation offering more interactive dashboard capabilities including drag-and-drop positioning."
+    },
+    {
+      "topic": "Traditional Reports Overview",
+      "content": "Traditional reports include list reports (detailed column-based data) and summarized reports (aggregated statistics). The Report Browser organizes reports by categories and provides search functionality. Report types include list, summarized, and advanced reports. Report categories organize reports logically. Creating report categories and shortcuts helps users find relevant reports. Usage reports track report execution statistics. Reports support filters, sorting, grouping, and chart integration."
+    },
+    {
+      "topic": "Report Editor and Report Definitions",
+      "content": "The Report Editor provides a visual interface for modifying reports. The Data Explorer helps select data fields. List reports can be modified by adding/removing columns, sorting, and filtering. Summarized reports support aggregation functions. Filter conditions can be added, edited, and combined with logic operators. Charts can be managed (add, configure, remove) in Report Editor. Reports can be converted between list and summarized formats. Advanced reports use Report Definition rules for complex SQL generation with joins, sub-queries, and custom expressions."
+    },
+    {
+      "topic": "Advanced Reports and Report Definitions",
+      "content": "Advanced reports use Report Definition rules for maximum flexibility. Report Definitions support: custom SQL generation, multiple data source joins, sub-queries, parameterized filters, computed columns, and complex aggregations. Managing filter options in Report Viewer provides end-user customization. Charts in reports support various types including maps with geographic associations. Adding charts uses the Report Definition rule form. Report categories can be advanced categories with specific access controls. Report shortcuts provide quick access to frequently used reports."
+    },
+    {
+      "topic": "External OLAP Databases",
+      "content": "Pega Platform supports external OLAP (Online Analytical Processing) databases as data sources for Insights and reports. Supported databases include Amazon Redshift and Google BigQuery. Establishing connectivity involves creating database configuration records specific to each database type. For Redshift: configure JDBC connection, authentication, and schema settings. For BigQuery: configure service account credentials, project settings, and dataset mappings. Database table configuration maps external tables to Pega data. Column mapping ensures proper data type translation between systems. Scope of support defines which reporting features work with each external database."
+    },
+    {
+      "topic": "BIX Data Extraction Overview",
+      "content": "Business Intelligence Exchange (BIX) extracts data from Pega Platform for use in external BI tools and data warehouses. BIX supports output formats: XML, CSV, and database schema. Extraction can be run manually (from Ruleform), automatically (Job Scheduler), or from command line (on-premises only). BIX extracts large volumes of data for data mining, statistical analysis, trend identification, and pattern recognition. BIX is implemented as a Ruleset with configurable extraction rules."
+    },
+    {
+      "topic": "BIX Extraction Configuration",
+      "content": "BIX extraction configuration includes: defining extract rules (which classes and properties to extract), configuring activities to access extract files, scheduling extractions via Job Scheduler, and managing cloud vs on-premises differences. For Pega Cloud: specific troubleshooting for cloud environments and extracting to custom output repositories. For on-premises: command-line extraction with source/target database configuration, prconfig.xml settings, log configuration, password encryption, ANT build files, and DDL generation for database schema extractions."
+    },
+    {
+      "topic": "BIX Logging and Error Handling",
+      "content": "BIX logging provides detailed extraction execution information. Viewing and configuring BIX logs helps monitor extraction health. BIX error handling covers common extraction failures and recovery procedures. Performance optimization includes: configuring parallel extraction threads, optimizing query execution, managing memory for large extractions, and using incremental extraction for changed-data-only scenarios. BIX logging integrates with Pega's standard logging framework for centralized monitoring."
+    },
+    {
+      "topic": "Troubleshooting Insights Issues",
+      "content": "Common Insights issues include: login prompt appearing too frequently (session/authentication issues), thousands separator problems in number columns, renaming Explore Data objects, missing columns in Explore Data (property mapping issues), missing data objects (configuration problems), and Portal issues. Troubleshooting involves checking data source connectivity, verifying object configurations, reviewing access permissions, and examining browser console for JavaScript errors. Insights and Reporting versus External Tools comparison helps decide when to use Pega's built-in tools versus external BI solutions."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What is the difference between Insights and Traditional Reports in Pega?",
+      "answer": "Insights are modern, interactive visualizations with drill-down capability, AI-powered generation via GenAI, export to Excel, and chart customization with conditional formatting and benchmarks. Traditional Reports are classic tabular reports with list (detailed columns) and summarized (aggregated statistics with static charts) types. Insights support both Constellation and Theme Cosmos; Traditional Reports are managed through Report Browser with Report Editor for modifications."
+    },
+    {
+      "question": "How do you create Insights in Pega Platform '25?",
+      "answer": "Three methods: 1) Pega GenAI — type natural language queries to auto-generate Insights, 2) UI Authoring — visual builder in Explore Data with field selection, chart configuration, and filtering, 3) Explore Data interface — direct data exploration with save-as-Insight capability. Insights can be customized with data series, conditional formatting, reference points, and color-coding. They can be shared, scheduled for auto-refresh, and embedded in application landing pages."
+    },
+    {
+      "question": "What is Explore Data and how do you enable it?",
+      "answer": "Explore Data provides access to application data for analysis and visualization. To enable: 1) Enable Constellation-based landing pages, 2) Add Explore Data to the application navigation menu. It supports creating Insights (table or chart-based), filtering/sorting/grouping data, exporting to Excel, and sharing results. Customization includes specifying which data objects are available and enabling it for UI Kit applications."
+    },
+    {
+      "question": "What external OLAP databases does Pega support for reporting?",
+      "answer": "Pega Platform supports Amazon Redshift and Google BigQuery as external OLAP databases. Configuration requires creating database configuration records with JDBC connections, authentication, and schema settings. Database table configuration maps external tables to Pega data types. Column mapping handles data type translation. Not all reporting features work with every external database — the scope of support defines available features per database type."
+    },
+    {
+      "question": "What is BIX and how does it work?",
+      "answer": "BIX (Business Intelligence Exchange) extracts data from Pega Platform for external BI tools and data warehouses. Output formats include XML, CSV, and database schema. It can run manually (Ruleform), automatically (Job Scheduler), or via command line (on-premises only). Configuration involves defining extract rules, activities for file access, and scheduling. Cloud and on-premises have different configurations. BIX supports large-volume extraction, incremental extraction, parallel threads, and integration with Pega's logging framework."
+    },
+    {
+      "question": "How do you configure charts in Pega reports?",
+      "answer": "In Insights: configure chart type, data series, color-coding by values, reference points for benchmarks, data grouping, and interactive drill-down. In Traditional Reports: use Report Editor to add/remove/configure charts (static, no drill-down). Advanced reports use Report Definition rule forms for chart configuration. Charts support various types and can include map charts with geographic associations for location-based data visualization."
+    },
+    {
+      "question": "How do you schedule Insights in Pega?",
+      "answer": "Scheduling Insights enables automatic data refresh on defined intervals. Configuration involves setting the refresh frequency (hourly, daily, weekly), defining notification recipients, and managing scheduled Insights through the scheduling interface. Scheduled Insights automatically update their data and charts, ensuring users always see current information without manual refresh."
+    },
+    {
+      "question": "What are Report Definitions and when should you use them?",
+      "answer": "Report Definitions are advanced report rules that provide maximum flexibility through custom SQL generation, multiple data source joins, sub-queries, parameterized filters, computed columns, and complex aggregations. Use them when standard Report Editor capabilities are insufficient — for complex queries spanning multiple tables, custom calculations, or integration with external databases. They support filter options in Report Viewer for end-user customization."
+    },
+    {
+      "question": "How do you troubleshoot missing data in Explore Data?",
+      "answer": "Check: 1) Data object configuration — verify objects are properly defined and exposed to Explore Data, 2) Property mappings — ensure columns map correctly to Pega properties, 3) Access permissions — confirm user has read access to relevant data, 4) Data source connectivity — verify database connections are active, 5) Explore Data enablement — check that objects are specified for Explore Data availability. Browser console may reveal JavaScript errors affecting data display."
+    },
+    {
+      "question": "How does Pega GenAI help with Insights?",
+      "answer": "Pega GenAI generates AI-powered Insights from natural language queries at runtime. Users can select from auto-generated prompts or type custom queries. For example, 'Show average sales and profits across states' or 'Show 5 bestselling product subcategories.' GenAI transforms the query into a visualization (chart or table) that can be saved as a reusable Insight, customized, shared, and embedded in application pages."
+    }
+  ]
+}

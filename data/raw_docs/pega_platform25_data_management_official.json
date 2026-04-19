@@ -1,0 +1,118 @@
+{
+  "title": "Pega Platform '25 — Data Management (Official)",
+  "source": "Pega Platform '25 Data Management Official Documentation (440 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Data Management Overview and Center-Out Approach",
+      "content": "Data in Pega Platform serves as the foundation for effective application functionality. Pega uses a Center-out approach where the Data Model is the heart of the application — you start with Case Types and Data Objects, then configure Views for user experience and integrations for back-end data sourcing. This decouples data sources from data display, giving flexibility to change sources without affecting the Data Model or UI. Enterprise data typically exists across multiple systems; Pega provides tools for data modeling, integration, and management to address this distribution. You can create your Data Model using Pega Blueprint (natural language description → auto-generated Data Objects and fields) or manually in App Studio/Dev Studio. App Studio provides default building blocks for fast delivery; Dev Studio handles advanced/complex tasks."
+    },
+    {
+      "topic": "Business Architecture and Data Model Levels",
+      "content": "Business architecture is a conceptual model of your organization's software ecosystem with layers: interaction layer (how customers interact — self-service, CSR), business applications (specialized standalone apps based on Case Type workflows), modules (reusable entities representing specific functionalities — technically applications designed for reuse), and enterprise layer (generic assets used across the entire organization). Three Data Model levels: Module (single-functionality reusable structure, e.g., Weather module), Business Application (standalone solution with workflows), Enterprise (organization-wide generic assets like Address Data Object). Best practice: avoid creating elements at enterprise level unless truly universal; instead create reusable modules with clearly defined business functions to reduce clutter and simplify maintenance. Connect levels using Constellation fields (embedded data and reference data)."
+    },
+    {
+      "topic": "Data Model Building Blocks — Case Types and Data Objects",
+      "content": "Case Types represent business processes; Data Objects represent objects or persons involved in those processes. Instances of both are called Data Records stored in a system of record (SOR — internal or external like REST). In Dev Studio, Data Objects are called Data Types and fields are called properties. Each Data Object created in App Studio automatically gets three default Data Pages including a savable Data Page with default save plans. Data Records are unique instances in the Pega database for a Data Object. Fields serve as components holding individual pieces of information — Pega provides Field Types automatically paired with UI controls (e.g., Email field → Email control). The Data Model visualization helps understand data dependencies — available at application, Case Type, and Data Object levels."
+    },
+    {
+      "topic": "Data Relationships — Embedded Data, Reference Data, and Query Fields",
+      "content": "Three main data relationship types: 1) Embedded data — embeds a Data Object inside another Data Object or Case Type; data comes from user input stored as part of the Case's instance; best for information not referenced independently of the Case; editable in Case context; useful for capturing user-submitted data or creating snapshots of values at decision time. 2) Data reference — stores the ID of a Data Object in the Case and retrieves the Data Record from SOR; read-only in Case context; not suitable for audit data since SOR values may change; good for displaying shared reference information across Cases. 3) Query fields — retrieves data from external systems using parameters from Case context; references a Data Page with defined parameters; does not store data. Additionally: Case reference relates Cases to other Case instances; reverse fields auto-created for two-way relations."
+    },
+    {
+      "topic": "Data Relationships — One-to-One, One-to-Many, Many-to-Many",
+      "content": "One-to-one relationship: a record in one entity is associated with exactly one record in another entity (e.g., Patient has one Spouse). The field contains a foreign key referencing the unique ID. One-to-many relationship: a record in one entity is associated with multiple records in another entity (e.g., Patient has multiple Medications). The field contains foreign keys for all references. Many-to-many relationship: multiple records in two entities relate to multiple records of each other (e.g., multiple Patients relate to multiple Doctors). Pega Platform generates a new linked table for each many-to-many relationship. Important: do not set foreign keys at the database level as it may affect migration from on-premises to Pega Cloud. Use Pega's data relationship fields instead."
+    },
+    {
+      "topic": "Creating and Managing Data Objects",
+      "content": "Create Data Objects in App Studio: Data > Add Data Object > enter name (AI-suggested names available) > optionally set inheritance via 'Reuse assets from' > choose Data Model creation method: Manual, Spreadsheet (import structure from file), or AI suggestions (Pega GenAI generates fields). Pega Autopilot can create Data Objects and integrations via natural language — describe what you need, Autopilot creates fields and can set up OpenAPI-based integrations. In Dev Studio, create Data Types via navigation pane > Data types > Options > Add data type. Data Objects can be embedded in other Data Objects to broaden scope. Views organize how information is displayed at runtime — configure on the User Interface tab. Connect Data Objects to systems of record: Pega SOR (internal, auto-configured with save plans) or external SOR (REST, OpenAPI, database)."
+    },
+    {
+      "topic": "Field Types and Adding Fields",
+      "content": "Pega provides multiple field types: Text (single line, paragraph with plain/rich text), Email, Phone, Number (Integer, Decimal, Currency, Percentage), Date/DateTime, Boolean, Picklist (dropdown, search box, or radio buttons — choices from local list, AI-generated, or Data Page), Attachment (single or list, at any Case Data Model level), User reference (search box or dropdown), Location, Embedded data, Data reference, Query, Case reference, and Calculated fields. Add fields via Data Model tab, visual Data Model, or directly to forms. Field options: Optional, Required, Calculated (read-only). Calculated fields use expressions (e.g., .Departure - .Arrival), decision tables, or functions (Sum, Average, etc.). AI-driven Case classification predicts field values using NLP topic detection with configurable minimum confidence (default 80%)."
+    },
+    {
+      "topic": "Data Pages Overview",
+      "content": "Data Pages are page or list structures containing fields defined by Data Objects. They increase effectiveness by preloading and caching data. Data Page scope: Thread (single requestor thread), Requestor (accessible across all threads), Node (any requestor on current node). Modes: Read-Only (prevents modification except during load), Editable (allows modification but no save plans), Savable (supports save plans to write back to SOR). Data sources include: Connector (REST, SOAP, SAP, etc.), Data Transform, Report Definition, Activity, Lookup, Knowledge Buddy, Robotic Automation, Robotic Desktop Automation, Aggregate Sources (multiple REST connectors combined). Refresh strategies: Reload once per interaction, Reload if older than (time-based), Do not reload (node-scoped only). Differences from clipboard pages: read-only Data Pages appear in separate clipboard section, are not passivated (deleted and re-created on activation), and support node scope."
+    },
+    {
+      "topic": "Data Pages in Constellation UI",
+      "content": "In Constellation UI, Data Pages have specific requirements: 'Allow querying any column' must be enabled for use in Constellation features like picklist sourcing. Supported Data Pages: any with API status, any in top-level application Ruleset, any from built-on Case or Data Type in the top-level application. 'Limit to a single Data Page' can generally be disabled in Constellation. Refresh strategies: 'Reload once per interaction' and 'Reload if older than' are supported; 'Do not reload' works for node-scoped read-only pages. Server-side invalidation uses Activity method Page-Remove or Data Transform pxClearAllInstancesOfDataPage. Client-side invalidation uses Activity pxC11NPublishDatapageUpdate (sends websocket message to invalidate client-side cache). Queryable Data Pages enable filtering, sorting, and grouping via the /data_views REST API."
+    },
+    {
+      "topic": "Creating and Configuring Data Pages",
+      "content": "Create Data Pages in Dev Studio: Records > Data Model > Data Page > New. Configure: name (start with D_), structure (Page or List), object type (class), mode (Read-Only/Editable/Savable), scope (Thread/Requestor/Node). Select data source: Connector (type + name, with request/response data transforms), Data Transform, Report Definition, Activity, Lookup, Knowledge Buddy, Robotic Automation, Aggregate Sources. Configure parameters to control data retrieval. Searchable Data Pages: enable for simple search conditions (equal to, and); configure request JSON transform and search parameters. Queryable Data Pages: enable for complex searches with filtering, sorting, grouping, and pagination; require Request Data Transforms that convert queries to REST calls using pyQueryPage clipboard page. Multiple data sources: add alternative sources with when conditions to dynamically select the appropriate source based on parameters."
+    },
+    {
+      "topic": "Saving Data in Data Pages — Save Plans",
+      "content": "Savable Data Pages support save plans to write data back to systems of record. When you create a Data Object with Pega SOR in App Studio, save plans are configured automatically. Save plans define the logic for persisting data changes — you can configure conditions for when saves occur. Methods to trigger saves: flow actions during postprocessing, Save Data Page shape in Case Designer or Flow form, Save-DataPage method in activities. For external SORs, configure save plans in Dev Studio with custom conditions and connector mappings. Data Pages can be listed in flow actions to save during Case processing. The system handles the mapping between clipboard data and the target system format."
+    },
+    {
+      "topic": "Data Model Operations and SQL Management",
+      "content": "Maintain data integrity with Data Model operations: Delete Data Records in bulk (import .csv with Purpose=Delete, map columns to key fields), Manage Data Model through SQL (ExecuteRDB SQL API for insert/update/delete via activities without requiring Data Objects), Manage database in Pega Cloud (add columns and change lengths via Data Object explorer in Dev Studio or Integration Designer in App Studio). Change property Rule types in higher Ruleset versions with restrictions. Inserting via SQL: use ExecuteRDB in a Java step within an activity. Updating via SQL: similar ExecuteRDB approach with UPDATE statement. Deleting via SQL: ExecuteRDB with DELETE statement. All SQL operations require creating an activity in Dev Studio."
+    },
+    {
+      "topic": "Field Values and Localization",
+      "content": "Field Value Rules restrict property values to allowed options and support localization by overriding English words with equivalents in other languages. Create via Dev Studio: Create > Data Model > Field Value > specify label, field name, translated value (only letters, numbers, single characters, underscores). The Localized label tab supports multiple languages (e.g., German: Appendektomie, Spanish: Apendicectomía). Field Values can be used as: constant values for Decision Tables, for Field Value-based picklists, or for localization. Parametrized Field Values support dynamic values. Configure picklists in App Studio to source from Field Values for controlled user input."
+    },
+    {
+      "topic": "Data Object Connection Methods",
+      "content": "Connect Data Objects to systems of record using multiple methods: Direct REST integration (configure endpoints, methods, request/response transforms), OpenAPI Specification integration (import API spec, auto-generate connectors and mappings), Database integration (connect to external databases via JDBC), Pega internal SOR (default, auto-configured with three default Data Pages and save plans). In App Studio, connect via Data Pages tab > Connect to system of record > select Pega or External system. For external systems, configure connection details, authentication, endpoints, and data transforms. The Integration Designer in App Studio simplifies external system connections. Data Objects can be reconnected to different SORs without recreating the Data Model."
+    },
+    {
+      "topic": "Adding Records and Bulk Operations",
+      "content": "Add records to Data Objects: locally (manual entry in App Studio), with AI (sample records generated by Pega GenAI), or via bulk import from files. Update Data Records individually or in bulk from CSV files — map file columns to Data Object fields, select update purpose. Export Data Records from Data Objects for backup or analysis. Bulk delete via CSV import with Purpose=Delete, mapping key fields. For large-scale data operations, use the ExecuteRDB SQL API via activities for direct database manipulation. Data Object wizard handles record management with error reporting for locked ruleset processing and other issues."
+    },
+    {
+      "topic": "Calculated Fields and AI-Driven Predictions",
+      "content": "Calculated fields automatically return values based on input data. Calculation methods: Expressions (e.g., .Departure - .Arrival for hotel stay length), custom Decision Tables (existing or new), Functions (Sum, Average, Count, Min, Max for numeric fields). All field types support Expressions and Decision Tables; Functions are available for currency, decimal, integer, and percentage fields. AI-driven Case classification: predict field values using NLP topic detection models; configure minimum confidence threshold (default 80%); predicted values can enhance any Case Step using Conditions (assignment routing, stage changes, decision steps). The system creates a Text Prediction with the topic detection model. Available for Pega Process AI applications with the EnableGenerativeAI toggle enabled."
+    },
+    {
+      "topic": "Data Validation and Troubleshooting",
+      "content": "Configure Case-wide validation for correct data entry in fields. Troubleshooting field errors: production level checks may prohibit Field Type changes; optimized properties in external classes cannot be changed without updating external mappings; properties optimized in other classes require unoptimizing first. Field type changes: navigate to Data Object > Data Model tab > Edit property > Change type. If rules use the changed field, review impact. Locked ruleset processing in Data Object wizard requires appropriate permissions. Omit history snapshots for Data Types when not needed for performance. View test cases for Data Types to verify behavior."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What is the Center-out approach to data modeling in Pega Platform?",
+      "answer": "The Center-out approach makes the Data Model the heart of the application. You start by defining Case Types (business processes) and Data Objects (entities involved), then build outward: configure Views for user experience and integrations for back-end data sourcing. This decouples data sources from data display — you can change sources without affecting the Data Model or UI, and vice versa. When you create Data Objects in App Studio, the system auto-creates default Data Pages with save plans, giving you ready-to-use building blocks. The approach ensures that UI follows naturally from the Data Model, and integrations connect seamlessly."
+    },
+    {
+      "question": "What are the three types of data relationship fields in Pega?",
+      "answer": "1) Embedded data — embeds a Data Object inside a Case Type or another Data Object; data is stored as part of the Case instance; editable; best for user-submitted data not needed outside the Case, or for creating value snapshots at decision time. 2) Data reference — stores the ID of a Data Object and retrieves the Data Record from a SOR at runtime; read-only in Case context; not suitable for audit data since source values may change. 3) Query fields — uses parameters from Case context to retrieve data from external systems via a Data Page; does not store data; useful for dynamic lookups like appointment lists or search results."
+    },
+    {
+      "question": "What are Data Pages in Pega and what scopes/modes do they support?",
+      "answer": "Data Pages are page or list structures that contain fields defined by Data Objects, preloading and caching data for efficiency. Scopes: Thread (single requestor thread), Requestor (accessible across all threads), Node (any requestor on the current node). Modes: Read-Only (no modification except during load), Editable (allows modification, no save plans), Savable (supports save plans to write back to SOR). Data sources include: Connectors (REST, SOAP, SAP), Data Transforms, Report Definitions, Activities, Lookups, Knowledge Buddy, Robotic Automation, and Aggregate Sources. Refresh strategies: reload once per interaction, reload if older than (time-based), or do not reload."
+    },
+    {
+      "question": "How do you create a Data Object in Pega App Studio?",
+      "answer": "Navigate to Data > Add Data Object > enter name (AI-suggested names available) > optionally set inheritance via 'Reuse assets from' > choose when to define source data > select Data Model creation method: Manual (define fields one by one), Spreadsheet (import from file), or AI suggestions (Pega GenAI generates fields based on the Data Object name). Alternatively, use Pega Autopilot to create Data Objects via natural language prompts. The system auto-creates three default Data Pages including a savable Data Page with save plans. Connect to a SOR: Pega internal (auto-configured) or external (REST, OpenAPI, database). In Dev Studio, Data Objects are created as Data Types."
+    },
+    {
+      "question": "What are the Data Model levels in Pega's business architecture?",
+      "answer": "Three levels: 1) Module — single-functionality reusable structure (technically an application designed for reuse, e.g., Weather module or Customer module); contains all assets for its business function. 2) Business Application — specialized standalone application handling specific operations (e.g., Fleet Management with Vehicle Rental and Sales Case Types). 3) Enterprise — organization-wide generic assets (e.g., a generic Address Data Object reusable across the entire company). Best practice: avoid enterprise-level elements unless truly universal; instead create reusable modules with clear business functions to reduce clutter and simplify maintenance. Connect levels using embedded data and reference data Constellation fields."
+    },
+    {
+      "question": "How do searchable and queryable Data Pages differ?",
+      "answer": "Searchable Data Pages support simple search conditions (equal to, and) — a request JSON transform queries the source and populates results that users can filter in a UI table. Good for basic lookups like searching customer records by phone number. Queryable Data Pages support complex searches with multiple conditions including not equal, greater than, less than, contains, starts with — plus filtering, sorting, grouping, and pagination via the /data_views REST API. They require Request Data Transforms that convert queries to REST calls using the pyQueryPage clipboard page. Queryable Data Pages are needed for Constellation tables with search-and-select functionality."
+    },
+    {
+      "question": "How does Pega handle one-to-one, one-to-many, and many-to-many data relationships?",
+      "answer": "One-to-one: a field stores a foreign key referencing a single unique ID from another entity (e.g., Patient.Spouse → one Contact). One-to-many: a field contains foreign keys for multiple references (e.g., Patient.Medications → multiple Medication entities). Many-to-many: multiple records in two entities relate to each other (e.g., Patients and Doctors); Pega automatically generates a new linked table for each many-to-many relationship. Important: do not set foreign keys at the database level as it may affect migration to Pega Cloud — use Pega's data relationship fields instead."
+    },
+    {
+      "question": "What is Pega Autopilot and how does it help with data modeling?",
+      "answer": "Pega Autopilot (Pega GenAI) accelerates Data Model building in App Studio by creating Data Objects and integrations via natural language prompts. For Data Objects: describe what you need, Autopilot creates the Data Object with suggested fields — one at a time, with confirmation before proceeding. For integrations: Autopilot can create Data Objects connected to external systems using OpenAPI specifications, parsing endpoints, descriptions, parameters, and responses. If you don't have an OpenAPI spec, Autopilot can prepare one based on other available specs. Requires Pega Cloud with GenAI onboarding and the EnableGenerativeAI toggle enabled."
+    },
+    {
+      "question": "How do calculated fields work in Pega and what AI predictions are available?",
+      "answer": "Calculated fields auto-return values based on input. Three calculation methods: Expressions (e.g., .Departure - .Arrival), Decision Tables (existing or custom), and Functions (Sum, Average, Count, Min, Max — for numeric fields). All types support Expressions and Decision Tables. AI-driven prediction: for Pega Process AI applications, configure picklist or text fields with AI settings to predict values using NLP topic detection. Set minimum confidence (default 80%) — the field only takes the predicted value if confidence is high enough. Predicted values can drive routing logic (e.g., assign Cases to Work Queues based on predicted category). The system creates a Text Prediction model automatically."
+    },
+    {
+      "question": "How do you manage Data Records in bulk in Pega?",
+      "answer": "Bulk operations: Import records from CSV (App Studio > Data > Data Object > Records tab > Import), map file columns to Data Object fields, select purpose (Create/Update/Delete). Bulk delete via CSV with Purpose=Delete, mapping key fields. Export Data Records for backup or analysis. For large-scale direct database operations, use the ExecuteRDB SQL API via Java steps in activities — supports INSERT, UPDATE, DELETE without requiring Data Objects. In Pega Cloud, manage database columns via Data Object explorer in Dev Studio or Integration Designer in App Studio (add columns, change column lengths). Update Data Records individually or in bulk from files with column mapping."
+    }
+  ]
+}

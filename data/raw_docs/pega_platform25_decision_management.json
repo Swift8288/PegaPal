@@ -1,0 +1,130 @@
+{
+  "title": "Pega Platform '25 - Decision Management",
+  "source": "Pega Platform '25 Official Documentation - Decision Management (1999 pages)",
+  "version": "Pega Platform '25",
+  "last_updated": "2026-04-19",
+  "topics": [
+    {
+      "topic": "Decision Management Overview",
+      "content": "Decision management in Pega Platform '25 enables real-time decisions among thousands of potential choices using machine learning. Key features include: Decision Strategies (comprehensive strategies to improve customer experience across channels), Event Strategies (detect meaningful patterns in real-time event flows), Data Sets (configure data sources for customer and analytical data), Interaction History (record customer responses to propositions for Adaptive Models), Data Flows (scalable data pipelines to ingest, process, and move data), Predictions (use AI/ML models to predict outcomes), and Next-Best-Action (NBA) for personalized customer engagement. Decision management integrates with automation services, channel integrations, external services, and reporting capabilities."
+    },
+    {
+      "topic": "Decision Management Services and Configuration",
+      "content": "Pega Platform '25 provides several decision management services that must be enabled and configured: Decision Data Store (DDS) service for storing decisioning data in Cassandra, Adaptive Decision Manager (ADM) service for running adaptive models, Data Flow service for processing data pipelines, and Real-time Data Grid (RTDG) service for low-latency data access. Configuration includes connecting to external Cassandra databases through DDS, generating DDS diagnostics bundles, configuring the ADM service with settings like model snapshot frequency and thread pools, and monitoring decision management services. Node management includes managing decision management nodes separately from web/batch nodes."
+    },
+    {
+      "topic": "Cassandra and Decision Data Store",
+      "content": "Cassandra serves as the primary store for decisioning data in Pega Platform. Key aspects include: Cassandra cluster configuration (replication factor, consistency level, data centers), Cassandra encryption (SSL/TLS for inter-node and client-to-node communication), retry policy configuration, multi-data center configuration, Cassandra health monitoring, backup and restore procedures, node recovery, removing DDS nodes, verifying keyspace replication factor, and port status verification. The DDS service connects Pega to Cassandra and manages tables for interaction history, adaptive model data, and customer profiles. DDS tables include specific schemas for different data types with partition keys for distributed storage."
+    },
+    {
+      "topic": "Data Set Types and Configuration",
+      "content": "Pega Platform supports multiple Data Set types for decision management: Database Table Data Sets (connect to relational databases or external Cassandra), Decision Data Store Data Sets (use built-in Cassandra), BigQuery Data Sets (connect to Google BigQuery), HBase Data Sets, Snowflake Data Sets (connect to Snowflake Data Cloud), S3 Data Sets (Amazon S3 file storage), File Data Sets (local/SFTP files), Google Pub/Sub Data Sets (event streaming), Kafka Data Sets (message streaming with Avro schema support), Kinesis Data Sets (AWS streaming), Stream Data Sets (in-memory streaming), Summary Data Sets (aggregated statistics), Real-time Data Grid Data Sets (low-latency access), and Monte Carlo Data Sets (simulation). Each Data Set type has specific configuration for the DataSet-Execute method including read, write, browse, and delete operations."
+    },
+    {
+      "topic": "Data Flows Overview and Types",
+      "content": "Data Flows are scalable and resilient data pipelines that ingest, process, and move data between sources and destinations. Types include: Batch Data Flows (process large volumes of historical data), Real-time Data Flows (process streaming data continuously), and Single-case Data Flows (process data for individual cases). Data Flow shapes include: Source (input data), Filter (condition-based filtering), Set Property (transform data), Merge (combine multiple streams), Compose (create complex objects), Strategy (apply decision logic), Sub-Data Flow (nested processing), Branch (conditional routing), and Destination (output data). Orchestration manages the execution of Data Flow runs across cluster nodes."
+    },
+    {
+      "topic": "Data Flow Configuration and Management",
+      "content": "Data Flow configuration includes: creating batch runs with scheduling and partition management, creating real-time runs with Kafka/Stream input sources, configuring retry policies for SAVE operations, adding pre- and post-activities, recording scorecard explanations, testing Data Flows with preview functionality, making decisions within Data Flow runs, monitoring single-case runs, managing Data Flow runs (start/stop/pause/resume), resetting statistics for real-time runs, and understanding Data Flow run limits. The DataFlow-Execute method supports configurations for abstract output, stream input, and non-stream input Data Flows. Data Flow Run Options page properties control execution behavior."
+    },
+    {
+      "topic": "Interaction History",
+      "content": "Interaction History records how customers responded to propositions presented to them. Architecture includes event capture, storage in Cassandra via DDS, and querying for analytics. Setup involves configuring the interaction history Data Model which includes standard fields (InteractionID, CustomerID, Outcome, Channel, Direction, etc.) and custom extensions. Interaction history summaries aggregate data over time periods using Summary Data Sets. Change management handles schema evolution in summaries. Features include automatic truncation of Summary Data Sets, backfill operations for historical data, and resilient change management during system updates. Interaction history integrates with Adaptive Models, NBA reporting, and Contact Policies."
+    },
+    {
+      "topic": "Event Strategies",
+      "content": "Event Strategies detect meaningful patterns in real-time event flows and react to them. Creating event Strategies involves defining event sources, processing logic, and output actions. Event Strategy shapes include: Event Source (incoming event stream), Filter (condition-based event selection), Join (combine events from multiple sources with join conditions), Aggregate (compute statistics over event windows), and Emit (trigger actions). Features include: filter conditions, local variables, join conditions, dynamic window size behavior, aggregation options (count, sum, average, min, max, approximate median), unit testing event Strategies, creating test cases, running event Strategies, and managing the Event Catalog (create, clear, delete event types). Events can be browsed by customer or customer groups via the Customer Movie landing page."
+    },
+    {
+      "topic": "Propositions and Proposition Management",
+      "content": "Propositions represent offers, actions, or messages that can be presented to customers. Pega supports versioned propositions (managed through rulesets with version control) and unversioned propositions (managed directly, more flexible for business users). Proposition hierarchy is organized by Business Issues and Groups. Operations include: adding, duplicating, editing, bulk editing, defining validity periods, converting groups, creating properties in issues/groups, modifying hierarchy, and deleting propositions. The Proposition Management landing page provides a central interface for managing all propositions. Propositions serve as inputs to Strategies and NBA decisioning."
+    },
+    {
+      "topic": "Strategies and Strategy Design",
+      "content": "Strategies are the core decision-making components that evaluate propositions and determine the best actions. Creating a Strategy involves defining inputs, processing logic via the Strategy canvas, and outputs. Strategy components include: External Strategy (reference other strategies), Embedded Strategy (inline logic), Filter components (eligibility, applicability, suitability), Prioritization components (set priority, expression-based), Group By, Exclusion, Switch, Aggregation, and Results components. Testing includes single-case testing and batch case testing with test run labels. SSA mode enables running Strategies in a static system architecture. Strategy methods return lists of propositions, lists of properties, or compute segment logic."
+    },
+    {
+      "topic": "Globally Optimized Strategies",
+      "content": "Globally Optimized Strategies maximize business value across all customers simultaneously rather than optimizing per-customer. Creating involves defining optimization objectives (maximize/minimize), constraints (budget limits, volume caps, channel capacity), and expressions. Strategy optimization uses Expressions to define complex business logic. The performance profile monitors optimization quality and execution time. Operators can be configured to adjust optimization behavior. Globally Optimized Strategies integrate with standard Strategies and NBA for enterprise-wide optimization across channels."
+    },
+    {
+      "topic": "Decision Tables and Decision Trees",
+      "content": "Decision Tables evaluate conditions in a tabular format where rows represent rules and columns represent conditions and results. Creating decision tables involves specifying pages/classes, configuring additional options (evaluation mode: all rows vs. first matching, otherwise row), and completing the Table tab with conditions and return values. Decision Trees evaluate conditions in a hierarchical tree format with branches for different evaluation paths. Creating decision trees involves completing the Decision tab (Advanced or Basic format), specifying pages/classes, controlling output and actions, and configuring property evaluation. Both support circumstancing and can be tested directly. Map Values provide matrix-based lookups with row/column intersections."
+    },
+    {
+      "topic": "Predictive Models and Scorecards",
+      "content": "Predictive Models integrate external ML models (PMML format) into Pega decisions. Configuration includes adding predictors (standard and parameterized), mapping model inputs/outputs on the Mapping tab, and specifying Pages and Classes. Scorecard Rules provide rule-based scoring with defined predictors, score ranges mapped to decision results, and testable scoring logic. Scorecards include a Pages and Classes tab for data context. Both Predictive Models and Scorecards can be used within Strategies and Data Flows for automated decision-making."
+    },
+    {
+      "topic": "Prediction Studio Overview",
+      "content": "Prediction Studio is the workspace for data scientists and business analysts to manage predictions and adaptive models. Getting started includes setting up the environment, configuring access permissions, changing studios, specifying model repositories, configuring default Rule context, and enabling Machine Learning Operations (MLOps). Prediction Studio enables the export of Adaptive Model data for external analysis. Key capabilities include creating and monitoring predictions, managing adaptive models, configuring model performance thresholds, and integrating external ML models."
+    },
+    {
+      "topic": "Adaptive Models and Machine Learning",
+      "content": "Adaptive Models use machine learning to learn from customer interactions and continuously improve decision-making. They automatically adjust based on customer responses (accepts/rejects) to propositions. Key concepts include: model training from interaction history, predictor management (adding, removing, parameterizing predictors), model monitoring (AUC/ROC performance metrics), model snapshots for versioning, and integration with NBA. Adaptive Models support both online learning (continuous updates from real-time interactions) and batch learning (periodic updates from historical data). MLOps capabilities enable model lifecycle management including deployment, monitoring, and retraining."
+    },
+    {
+      "topic": "Next-Best-Action (NBA) and Customer Decision Hub",
+      "content": "Next-Best-Action (NBA) combines all decision management capabilities to determine the optimal action for each customer in real-time. NBA uses Strategies that evaluate propositions through eligibility (who can receive), applicability (relevance), suitability (compliance), and prioritization (AI-driven ranking). Pega Customer Decision Hub (CDH) is the application that operationalizes NBA across channels (web, mobile, call center, email). Key features include: always-on outbound campaigns, real-time inbound decisioning, contact policies (frequency caps, suppression rules), channel optimization, and A/B testing. NBA integrates interaction history, adaptive models, event strategies, and business rules for 1:1 personalization at scale."
+    },
+    {
+      "topic": "Identity Management",
+      "content": "Identity management in decision management handles customer identity resolution across channels and interactions. It ensures that customer data from different sources (web, mobile, call center, email) is correctly matched to the same individual. This enables unified customer profiles for consistent decisioning across all touchpoints. Identity management integrates with the interaction history and customer data stores to maintain accurate customer records."
+    },
+    {
+      "topic": "Real-time Data Grid (RTDG)",
+      "content": "The Real-time Data Grid provides low-latency access to customer and analytical data for decision-making. RTDG Data Sets store data in-memory across cluster nodes for fast read/write operations. Configuration includes creating RTDG Data Sets, setting up aggregation on the RTDG, and managing data distribution. RTDG integrates with Data Flows for real-time data processing and with Strategies for fast data lookups during NBA execution. It supports both streaming input and batch loading of data."
+    },
+    {
+      "topic": "Summary Data Sets and Aggregation",
+      "content": "Summary Data Sets aggregate data from multiple records into statistical summaries over configurable time windows. They are used for interaction history summaries, customer behavior tracking, and analytical reporting. Configuration includes defining aggregation functions (count, sum, average, min, max), time windows (daily, weekly, monthly, custom), merge statistics, and dynamic system settings. Summary Data Sets support automatic truncation to manage storage, backfill operations for new summaries over historical data, and change management for evolving schemas during system updates."
+    },
+    {
+      "topic": "Streaming Data Integration",
+      "content": "Pega Platform supports streaming data integration through multiple Data Set types: Kafka Data Sets (Apache Kafka with consumer/producer settings, Avro schema support, topic configuration), Kinesis Data Sets (AWS Kinesis streaming), Google Pub/Sub Data Sets (Google Cloud event streaming), and Stream Data Sets (in-memory Pega streaming with partition keys). Streaming Data Sets are used in real-time Data Flows for continuous data processing. Monitoring capabilities include streaming Data Set metrics for throughput, latency, and error tracking. Configuration covers authentication, schema management, and error handling."
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What are the main components of Pega Decision Management?",
+      "answer": "Pega Decision Management includes: Decision Strategies (visual strategy design for customer decisions), Event Strategies (real-time event pattern detection), Data Sets (configurable data sources for customer and analytical data), Interaction History (customer response tracking), Data Flows (scalable data pipelines), Predictions (AI/ML model-based outcome prediction), Adaptive Models (self-learning ML models), Next-Best-Action (optimal action determination), Proposition Management (offer/action catalog), and tools like Decision Tables, Decision Trees, Scorecards, and Predictive Models."
+    },
+    {
+      "question": "What Data Set types are available in Pega Platform '25 for decision management?",
+      "answer": "Pega Platform '25 supports: Database Table, Decision Data Store (DDS/Cassandra), Google BigQuery, HBase, Snowflake, Amazon S3, File (local/SFTP), Google Pub/Sub, Kafka (with Avro schema), Kinesis, Stream (in-memory), Summary (aggregated stats), Real-time Data Grid (low-latency), and Monte Carlo (simulation) Data Sets. Each type has specific DataSet-Execute method configurations for read, write, browse, and delete operations."
+    },
+    {
+      "question": "How do Data Flows work in Pega and what types exist?",
+      "answer": "Data Flows are scalable, resilient data pipelines that ingest, process, and move data. Three types exist: Batch Data Flows (large historical data volumes), Real-time Data Flows (continuous streaming), and Single-case Data Flows (individual case processing). They use shapes like Source, Filter, Set Property, Merge, Compose, Strategy, Sub-Data Flow, Branch, and Destination. Data Flows can be tested with preview, monitored for performance, and configured with retry policies."
+    },
+    {
+      "question": "What is the difference between Decision Tables and Decision Trees?",
+      "answer": "Decision Tables evaluate conditions in a tabular format with rows as rules and columns as conditions/results — good for flat rule sets with multiple conditions evaluated together. They support 'all rows' or 'first matching' evaluation modes. Decision Trees evaluate conditions in a hierarchical tree format with branches — better for sequential, nested decision logic. Both support circumstancing, testing, and integration with Strategies. Map Values provide a third option with matrix-based lookups."
+    },
+    {
+      "question": "How does Next-Best-Action (NBA) work in Pega?",
+      "answer": "NBA combines all decision management capabilities to determine the optimal action per customer in real-time. It uses Strategies that evaluate propositions through four stages: Eligibility (who can receive the offer), Applicability (is it relevant now), Suitability (compliance/regulation checks), and Prioritization (AI-driven ranking using Adaptive Models). NBA operates across channels via Customer Decision Hub, integrating interaction history, contact policies, and adaptive models for 1:1 personalization."
+    },
+    {
+      "question": "What are Adaptive Models and how do they learn?",
+      "answer": "Adaptive Models are self-learning machine learning models that continuously improve from customer interactions. They learn from accept/reject responses to propositions, automatically adjusting predictions over time. They support online learning (real-time updates) and batch learning (periodic historical updates). Performance is monitored via AUC/ROC metrics. They are managed in Prediction Studio with MLOps capabilities for model lifecycle management including deployment, monitoring, and retraining."
+    },
+    {
+      "question": "What is Interaction History and how is it used?",
+      "answer": "Interaction History records customer responses to presented propositions (accepts, rejects, impressions). It stores data in Cassandra via the Decision Data Store service. The data model includes fields like InteractionID, CustomerID, Outcome, Channel, and Direction, plus custom extensions. It feeds into Adaptive Models for learning, NBA reporting, contact policy enforcement (frequency caps), and customer analytics via Summary Data Sets and the Real-time Data Grid."
+    },
+    {
+      "question": "How do Event Strategies detect patterns in real-time?",
+      "answer": "Event Strategies use shapes to process real-time event streams: Event Source (incoming stream), Filter (condition-based selection), Join (combine events with join conditions), Aggregate (compute statistics over configurable time windows), and Emit (trigger actions). They support dynamic window sizes, multiple aggregation options (count, sum, average, min, max, approximate median), unit testing, and integration with the Event Catalog for managing event types."
+    },
+    {
+      "question": "What are Globally Optimized Strategies?",
+      "answer": "Globally Optimized Strategies maximize business value across all customers simultaneously, rather than per-customer optimization. They define optimization objectives (maximize/minimize metrics), constraints (budget limits, volume caps, channel capacity), and expressions for complex business logic. They include performance profiling for monitoring optimization quality and execution time, and integrate with standard Strategies and NBA for enterprise-wide optimization."
+    },
+    {
+      "question": "How do you configure Cassandra for Pega Decision Management?",
+      "answer": "Cassandra configuration involves: setting up the cluster (replication factor, consistency level), configuring encryption (SSL/TLS for inter-node and client-to-node), retry policies, multi-data center setup, health monitoring, backup/restore procedures, and connecting through the Decision Data Store (DDS) service. DDS manages tables for interaction history, adaptive model data, and customer profiles. Key considerations include choosing proper partition keys for balanced data distribution and managing keyspace replication."
+    }
+  ]
+}
