@@ -7,6 +7,7 @@ python-dotenv>=1.0.1
 
 # ── Vector Database ──
 chromadb>=0.4.22
+pysqlite3-binary>=0.5.2    # newer SQLite for ChromaDB on Streamlit Cloud
 protobuf>=3.20,<5
 
 # ── LLM Clients ──

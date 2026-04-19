@@ -4,7 +4,14 @@ Streamlit Chat UI (v4 — Community Uploads)
 Run: streamlit run ui/app.py
 """
 
-import sys
+# ── SQLite fix for Streamlit Cloud (must run before any chromadb import) ──
+try:
+    __import__("pysqlite3")
+    import sys
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ImportError:
+    import sys
+
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -901,23 +908,4 @@ else:
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.button("📊 Explain Data Pages", use_container_width=True,
-                       on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",))
-        with col2:
-            st.button("🤖 Pega RPA Overview", use_container_width=True,
-                       on_click=_send_question, args=("Give me an overview of Pega Robotic Process Automation",))
-        with col3:
-            st.button("🔄 SOAP vs REST", use_container_width=True,
-                       on_click=_send_question, args=("Compare SOAP vs REST in Pega — when to use which?",))
-        with col4:
-            st.button("📦 Deployment Manager", use_container_width=True,
-                       on_click=_send_question, args=("How to use Pega Deployment Manager for CI/CD?",))
-
-
-
-# ── Chat Input (always at the bottom) ─────────────────────────────────
-st.chat_input(
-    "Ask PegaPal anything — errors, concepts, how-tos, comparisons...",
-    key="user_chat_input",
-    on_submit=_on_chat_submit,
-)
-
+                       on_click=_send_question, args=("Explain Data Pages in Pega — what are they, scopes, and best practices?",)
