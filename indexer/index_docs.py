@@ -333,23 +333,27 @@ class PegaIndexer:
             self._open_chroma()
         except Exception as e:
             # ChromaDB version mismatch — delete and rebuild from raw docs
-            logger.warning(f"ChromaDB open failed ({e}), rebuilding from scratch...")
+            logger.warning(f"ChromaDB open failed ({e}), will rebuild from scratch...")
             import shutil
             if CHROMA_DIR.exists():
                 shutil.rmtree(CHROMA_DIR)
             CHROMA_DIR.mkdir(parents=True, exist_ok=True)
             self._open_chroma()
-            # Rebuild index from raw docs
-            self.embedder = get_embedder(backend)
+
+        self.embedder = get_embedder(backend)
+
+        # Auto-rebuild if collection is empty (e.g. fresh /tmp on Streamlit Cloud)
+        count = self.collection.count()
+        if count == 0 and RAW_DOCS_DIR.exists():
+            logger.info("Collection empty — auto-indexing from raw docs...")
             total = self.index_directory(RAW_DOCS_DIR)
             logger.info(f"Auto-rebuilt index: {total} chunks from raw docs")
-            return
-        self.embedder = get_embedder(backend)
-        logger.info(
-            f"Indexer ready — collection '{CHROMA_COLLECTION}' "
-            f"({self.collection.count()} existing docs), "
-            f"backend={backend or EMBEDDING_BACKEND}"
-        )
+        else:
+            logger.info(
+                f"Indexer ready — collection '{CHROMA_COLLECTION}' "
+                f"({count} existing docs), "
+                f"backend={backend or EMBEDDING_BACKEND}"
+            )
 
     def _open_chroma(self):
         """Open ChromaDB client and collection."""

@@ -3,7 +3,7 @@ PegaPal — Central Configuration
 """
 
 import os
-import shutil
+import platform
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -12,31 +12,15 @@ load_dotenv()
 # ── Paths ──────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-_CHROMA_SRC = DATA_DIR / "chroma_db"
 
-# On Streamlit Cloud, the app dir may be read-only or have SQLite locking
-# issues.  Detect cloud by checking for /mount/src OR a non-writable data dir,
-# then copy ChromaDB to /tmp/ so SQLite can acquire write locks.
-def _resolve_chroma_dir():
-    """Return a writable ChromaDB path, copying to /tmp if necessary."""
-    # Quick check: can we write to the source directory?
-    try:
-        test_file = _CHROMA_SRC / ".write_test"
-        _CHROMA_SRC.mkdir(parents=True, exist_ok=True)
-        test_file.touch()
-        test_file.unlink()
-        return _CHROMA_SRC  # Local / writable — use as-is
-    except (OSError, PermissionError):
-        pass
-    # Fallback: copy to /tmp
-    tmp = Path("/tmp/chroma_db")
-    if not tmp.exists() and _CHROMA_SRC.exists():
-        shutil.copytree(_CHROMA_SRC, tmp)
-    elif not tmp.exists():
-        tmp.mkdir(parents=True, exist_ok=True)
-    return tmp
-
-CHROMA_DIR = _resolve_chroma_dir()
+# On Streamlit Cloud (Linux), SQLite in the app directory has locking issues.
+# Use /tmp/ which is always writable. The auto-rebuild in PegaIndexer will
+# populate it from raw_docs/ on first load.
+# On Windows (local dev), use the normal data/chroma_db/ path.
+if platform.system() == "Windows":
+    CHROMA_DIR = DATA_DIR / "chroma_db"
+else:
+    CHROMA_DIR = Path("/tmp/chroma_db")
 RAW_DOCS_DIR = DATA_DIR / "raw_docs"
 COMMUNITY_DOCS_DIR = DATA_DIR / "community_docs"
 COMMUNITY_META_FILE = DATA_DIR / "community_meta.json"
